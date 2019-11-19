@@ -16,5 +16,7 @@ jobs:
           root_file: main.tex
     - name: upload
       uses: actions/upload-artifact@master
+      with:
+        name: main.pdf
       env:
         CI: true
