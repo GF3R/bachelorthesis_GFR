@@ -1,0 +1,16 @@
+name: Latex
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Github Action for LaTeX
+      uses: xu-cheng/latex-action@1.2.0
+      with:
+          working_directory: '/'
+          root_file: 'main.tex'
+      env:
+        CI: true
