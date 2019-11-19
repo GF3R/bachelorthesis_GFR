@@ -13,7 +13,6 @@ jobs:
     - name: Github Action for LaTeX
       uses: xu-cheng/latex-action@1.2.0
       with:
-          working_directory: '/'
-          root_file: 'main.tex'
+          root_file: main.tex
       env:
         CI: true
