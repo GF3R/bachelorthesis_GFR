@@ -7,10 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:  
       - name: test
-        run: ls -a; 
-            dir;
-            cd ..;
-            ls  -a;
+        run: git pull;
       - name: Github Action for LaTeX
         uses: xu-cheng/latex-action@1.2.0
         with:
