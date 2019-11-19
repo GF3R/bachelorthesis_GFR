@@ -14,10 +14,13 @@ jobs:
       uses: xu-cheng/latex-action@1.2.0
       with:
           root_file: main.tex
+    - name: test
+      run: ls -a;
+          cd ..; ls -a;
     - name: upload
       uses: actions/upload-artifact@master
       with:
         name: main.pdf
-        path: /
+        path: ./
       env:
         CI: true
