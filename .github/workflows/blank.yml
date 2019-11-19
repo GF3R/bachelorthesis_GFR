@@ -4,12 +4,15 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:  
-    - name: Github Action for LaTeX
-      uses: xu-cheng/latex-action@1.2.0
-      with:
-        working_directory: '/'
-        root_file: 'main.tex'
+      - name: test
+        run: ls -a
+        
+      - name: Github Action for LaTeX
+        uses: xu-cheng/latex-action@1.2.0
+        with:
+          working_directory: '/'
+          root_file: 'main.tex'
+ 
+    
