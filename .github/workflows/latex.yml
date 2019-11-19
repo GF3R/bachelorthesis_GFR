@@ -16,7 +16,6 @@ jobs:
           root_file: main.tex
     - name: test
       run: ls -a;
-          cd ..; ls -a;
     - name: upload
       uses: actions/upload-artifact@master
       with:
