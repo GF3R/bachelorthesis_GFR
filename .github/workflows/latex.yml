@@ -10,11 +10,11 @@ jobs:
       uses: xu-cheng/latex-action@1.2.0
       with:
           root_file: main.tex
+    - name: build
+      uses: skx/github-action-build@release-0.6.1
     - name: upload
       uses: skx/github-action-publish-binaries@master
       with:
-        name: main.pdf
-        path: ./main.pdf
         args: main.pdf
       env:
         CI: true
