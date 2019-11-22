@@ -9,7 +9,9 @@ jobs:
     - name: Set up Git repository
       uses: actions/checkout@v1
     - name: Compile and Deploy LaTeX to PDF
-      uses: ottojo/uberblatt-action@v2
+      uses: xu-cheng/latex-action@1.2.0
+      with:
+          root_file: main.tex
     - name: GitHub Pages Deploy
       uses: maxheld83/ghpages@v0.2.1
       env:
