@@ -15,6 +15,7 @@ jobs:
       with:
         name: main.pdf
         path: ./main.pdf
+        args: main.pdf
       env:
         CI: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
