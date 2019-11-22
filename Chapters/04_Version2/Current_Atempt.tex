@@ -1,0 +1,25 @@
+\chapter*{Current Attempt}
+\label{chap:Technical CHallenges}
+\renewcommand{\thesection}{\arabic{section}}
+\setcounter{section}{0}
+
+After my first attempts and some discussion with my supervisor i realized that the solution is to distribute the system and send the data wirelessly. This enables me to add additional sensors without having issues with the Wire library. However this increases the cost and complexity of each sensor slightly, since each sensor needs some sort of "brain", which handles the connection and communciation. 
+However it reduces the complexity of the construction and the entire solution drasticly since it has single services talking ot each other and not an entier blob of logic. 
+
+\section{Communication}
+
+The communication will be firtly achieved via WIFI since I know the protocol and can get it running swiftly. Also the esp32 I have been using have WIFI natively enabled. 
+An issue with wireless communication is the synchronisation of the data flow. To simplify the process and due to lack of knowhow and time to achieve a correct synchronisation I will ignore it, while knowing the data might be timeshifted. 
+This might be an issue when visualising and analysing the data, but will be tackled then.
+
+Forthermore for the communication via WIFI a simple "Client Server" protocoll is used which has allready been widely implement in ESP32.
+
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\section{Sensors and Data}
+
+
+
+\input{Chapters/04_Version2/identifying_posture.tex}
