@@ -11,9 +11,10 @@ jobs:
       with:
           root_file: main.tex
     - name: upload
-      uses: takahashim/review-pdf-generator-action/upload-artifact@master
+      uses: skx/github-action-publish-binaries@master
       with:
         name: main.pdf
         path: ./main.pdf
       env:
         CI: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
