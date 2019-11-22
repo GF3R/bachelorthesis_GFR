@@ -14,12 +14,86 @@ This might be an issue when visualising and analysing the data, but will be tack
 
 Forthermore for the communication via WIFI a simple "Client Server" protocoll is used which has allready been widely implement in ESP32.
 
+Server Client Request: 
 \begin{lstlisting}
+String clientRequest(String input)
+{
+  Serial.println(input);
+  String response = "\0";
+  for (int i = 0; i < NUM_CLIENTS; i++)
+  {
+    WiFiClient client = server.available();
+    client.setTimeout(50);
+    if (client) {
+      if (client.connected()) {
+        client.println(input);
+        data = client.readStringUntil('\r');  // received the server's answer
+        Serial.println(data);
+        if (data != "\0")
+        {
+          int Index = data.indexOf(':');
+        
+          CLIENT = data.substring(0, Index);
+          ACTION = data.substring(Index + 1);
+          Serial.println(data);
+   
+          if (CLIENT == "ACK")
+          {
+            response = ACTION;
+          }
 
+          //client.flush();
+          //data = "\0";
+        }
+      }else{
+        Serial.println("client not connected");
+      }
+    }
+    else{
+        Serial.println("client null or false");
+      }
+  }
 \end{lstlisting}
 
+Client Loop:
+
+\begin{lstlisting}
+void loop () {
+  if (!client.connect(server, 80)) {
+    while (WiFi.status() != WL_CONNECTED) {
+      Serial.print(".");
+      delay(500);
+    }
+    Serial.print("+");
+    delay(100);
+    return;
+  }
+  data = client.readStringUntil('\r');  // received the server's answer
+  Serial.println(data);
+  if (data != "\0")
+  {
+    int Index = data.indexOf(':');
+
+    CLIENT = data.substring(0, Index);
+    ACTION = data.substring(Index + 1);
+
+    if (CLIENT == CLIENT_NAME)
+    {
+         client.println("ACK:" + getData());
+      
+    }else{
+        client.println("\0");
+    }
+
+    client.flush();
+    data = "\0";
+  }
+}
+\end{lstlisting}
+
+The Data will be sent 10 times per second for evaluation purposes. 
+However I hope and think this can be reduced, since we hopefully will not need that much data to determine how to usere i positioned. This would enable us to aggregate the data on the devices, which is a benefit only achievable by the current configuration of "Smart-sensors".
+
 \section{Sensors and Data}
-
-
 
 \input{Chapters/04_Version2/identifying_posture.tex}
