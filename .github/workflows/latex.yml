@@ -3,19 +3,15 @@ on: [push]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Github Action for LaTeX
-      uses: xu-cheng/latex-action@1.2.0
-      with:
-          root_file: main.tex
-    - name: build
-      uses: skx/github-action-build@release-0.6.1
-    - name: upload
-      uses: skx/github-action-publish-binaries@master
-      with:
-        args: main.pdf
+    - name: Set up Git repository
+      uses: actions/checkout@v4
+    - name: Compile and Deploy LaTeX to PDF
+      uses: ottojo/uberblatt-action@v2
+    - name: GitHub Pages Deploy
+      uses: maxheld83/ghpages@v0.2.1
       env:
-        CI: true
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BUILD_DIR: "/"
+        GH_PAT: ${{ secrets.GH_PAT }}
