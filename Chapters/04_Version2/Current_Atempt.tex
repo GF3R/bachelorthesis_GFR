@@ -101,23 +101,31 @@ The Data is saved onto an SD Card, this works well and enables to analyse de Dat
 The Idea of saving all the data locally came with the plan to have everything locally which then in a further step could be sent the a smartphone or a laptop without any interent. Maybe with bluetooth or a local hotspot. 
 
 During the development and testing of this concept, it turned out that the client server network was not very stable and it required much more hardware than i woud have liked. 
-The Server needed a few modules for it to work: 
-\begin{enumerate}
-    \item SD Card Reader
-    \item Real Time Clock
-\end{enumerate}
+The Server needed a few modules for it to work.
+
+\includegraphics[width=\linewidth]{images/CommunicationDiagrammExplenation.png}
 
 This does not sound like mucht but both of these elementes are quite complex and need to be configured additionally. This felt like quite the hassle and i sonn realized i need to find a new way to communicate.
 
 Beside these technical issues the data transfer during the development phase, where bluetooth or hotspot was avaialble was quite awkward since the device need to be stopped and the data needed to be analysed in a spereate step. 
 
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/CommunicationDiagrammLocal.png}
+ \end{center}
 After working with it for a while I tried to find a much simpler way, which is closer to the goal of a simple and affordable sensor set. To Tackle the issues with the client server network i first thought of using a simple http request, which would have a bit more overhead but would be more stable. This however didn't feel right and I realized that the solution, was something I already was quite familiar with. A simple MQTT Broker. 
+
+
 
 \section{Atempt B}
 
 After this first attempt i knew how to handle the message and date from the sensors which helped greatly. 
 The Communication in my new attempt was handled with a simple MQTT Broker, which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completly free and easy to apply. 
 
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/CommunicationDiagrammMQTT.png}
+\end{center}
 MQTT uses a simple publish subscribe protocoll which I have already implemented a few times.
 Below you see the whole setup and loop code, which is almost readable thanks to helper functions:
 \begin{lstlisting}
@@ -267,6 +275,8 @@ void callback(char* topic, byte* message, unsigned int length) {
 \end{lstlisting}
 This callback gets registered when connecting to the mqtt broker.
 
+
+
 \subsection{Benefits Version B}
 
 The Benefint of managing the messages via a MQTT Broker was that I could get the messages and work with them from any device with an Internet connection. This means that any calculation heavy tasks can be done from a "real" computer which handles these much better. 
@@ -284,6 +294,7 @@ The Fact that these sensors now can simply send data without knowing where they 
 The Obvious backdraw is, that the sensors need to have a constant interent connection. This is obviously not great, especially when we try to develop something for an every usage since we are somewhat bound to a single place. 
 
 Furthermore if used as a product, these sensors would need to be registered first bevor usage, this does increase complexity for a first usage however simplifes setup greatly.
+
 
 \input{Chapters/04_Version2/identifying_posture.tex}
 
