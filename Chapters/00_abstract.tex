@@ -1,1 +1,8 @@
-\section{Abstract}
+\chapter*{Abstract}
+\label{chap:Abstract}
+\renewcommand{\thesection}{\arabic{section}}
+\setcounter{section}{0}
+Backpain is a very common issue and can, in many cases, be traced back to a bad posture. 
+Technical solutions already do exist in trying to tackle this issue. However non of them seemed to be affordable or even open source. This is what has and still is inspiring my journey in trying to provide a simple and available solution for a very common issue. \newline
+To analyse posture it was quickly clear, that a gyroscope or/and an accelometer are needed to determine how a user is positioned. During testing and exchange with physiotherapists, it also was clear, that with the current implemented algorithms and know-how one sensor alone was not optimal for providing clear data. With a minimum of two sensors the curvature of the back can be detected with some certainty. For the communication of the data of these sensors many different things were tried and MQTT was finally used to test and implement the solution, which simplifies communication and also the specialised hardware necessary for this project, which further improves affordability and recreatability. \newline
+The data gathered and technical implementations are a great starting point for further development and a more precise understanding, of how to portray posture in the digital image. However much more testing and more interdisciplinary work, with physiotherapists and other medical experts, will be needed to reach a quality and level of certainty needed for such a venture.   

@@ -4,6 +4,11 @@ The Biggest hurdle, was and still is identifying and correctly analysing the dat
 
 Firstly I transformed the data into a CSV which is a commonly used format viable for many different applications
 
+According to the datasheet of the MPU6050 the collected data is "g-force". The accelometer measure in mg and the gyroscope in º/s. 
+
+\includegraphics[width=\linewidth]{images/MPU6050_DATA.png}
+The entire documentation can be found online \cite{MPU6000D59:online}.
+
 \subsection{Visualising with Python}
 
 I tried to visualize the data using python since it was recommended on a few forums and seamed to be feasible for this task. It actually did work quite well and I have achieved within 2 Days with Python. I have never worked with python before and was happy that I managed to use and apply it within days. 
@@ -24,3 +29,47 @@ ax.scatter3D(XSZAcc[:,0],XSZAcc[:,1],XSZAcc[:,2], c=XSZAcc[:,2], cmap='Greens')
 \end{lstlisting}
 
 \subsection{Visualising with Power BI}
+
+Power BI is a very powerfull tool which I was already used to, since we used it at work to visualize project data and quality gates. Therefore it was much easier for me to visualise the data.
+
+\includegraphics[width=\linewidth]{images/PowerBIVisualisiation.png}
+
+During different attempts of visualising the data i realised, it made sense to visualise it with a 2d graph, since the three dimensional visualisation did not offer any real benefits. Furthermore during this visualisation I also quickly saw, that the data collected had to be incorrect, since the accelometer should never fluctuate as much as id did. The Error was in my code and was quickly fixed, however I still had issues making conclusions for this static data.
+
+\subsection{Real Life Data Visualisation}
+
+The visualisation of static data has a lot of issues, especially when the data is dynamic. Since the collected data would have needed to be compared to a video to really understandt what was going on and what movement hat what effect. Therefore i decided to implement a small webservice which will visualise the data in real time. 
+
+This was achieved with a simple C# MVC website which simply subscribes to the MQTT broker. Here the switch to MQTT and the extra effort for this switch, was highly beneficial.
+
+The Website started small and was simply used to visualize the collected data:
+
+\includegraphics[width=\linewidth]{images/WebVisualisation_SIMPLE.png}
+
+Thanks to this visualisation I was quickly able to understand the data and add additional visualisations and make first conclusions which data was necessary for an analysation.
+The Information about the pitch, roll and yaw, was quite simple and only needs the accelometer data.
+
+\begin{lstlisting}
+function getRoll(x, y, z) {
+    pitch = 180 * Math.atan(x / Math.sqrt(y * y + z * z)) / Math.PI * 4;
+    roll = 180 * Math.atan(y / Math.sqrt(x * x + z * z)) / Math.PI * 4;
+    yaw = 180 * Math.atan(z / Math.sqrt(x * x + z * z)) / Math.PI * 4;
+    return {
+        "roll": roll,
+        "pitch": pitch,
+        "yaw": yaw
+    }
+}
+\end{lstlisting}
+
+With these formula the position of the sensor was really simple to read and visualise. However it was clear that one sensor would not be enough, since its position does not offer enough information about the posture: 
+
+\begin{wrapfigure}[16]{l}{0.3\textwidth}
+  \begin{center}
+\includegraphics[width=0.3\textwidth]{images/Backposition.png}
+  \end{center}
+  \caption{Back position}
+  \label{fig:BackPos}
+\end{wrapfigure}
+
+Therefore a minimum of two sensor would definitely be need to make conclusions from the data. Therefore the website was extended so it can visualise the data of three sensors.
