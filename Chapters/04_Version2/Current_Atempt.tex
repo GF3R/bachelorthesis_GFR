@@ -249,7 +249,7 @@ char* getMessage(){
 As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the mqtt Library could not handle "arduino" Strings and therefore needed char* which are a mess to work with.  Thats also why a grave error occured in this function. The lines which are commented out, were my first implementation which work but give wrong data since it does not access to expected array or data.
 This mistake was unforunately only discovered when visualising the data, since C++ does not throw any errors when accesing items out of the array, and simply returns the values in the adresses accessed.
 
-Dr. Köning showed me protobuf which I will try to implement as well, however protobuff does take some time to implement. Nontheless after some tinkering i finally managed to get a nice JSON message over the MQTT Broker: 
+Dr. König showed me protobuf which I will try to implement as well, however protobuff does take some time to implement. Nontheless after some tinkering i finally managed to get a nice JSON message over the MQTT Broker: 
 \begin{lstlisting}
 { 
     "id": "SENSOR-XSZ", 
@@ -272,14 +272,14 @@ void callback(char* topic, byte* message, unsigned int length) {
     command += (char)message[i];
   }
   if(command == "calibrate"){
-    calibrateMPU6050(gyroBias, accelBias); // Calibrate gyro and accelerometers, load biases in bias registers  
+    calibrateMPU6050(gyroBias, accelBias); 
+    // Calibrate gyro and accelerometers, load biases in bias registers  
     initMPU6050(); 
     Serial.println("MPU6050 initialized for active data mode....");
   }
 }
 \end{lstlisting}
 This callback gets registered when connecting to the mqtt broker.
-
 
 \subsection{Benefits Version 2}
 
@@ -295,9 +295,9 @@ The Fact that these sensors now can simply send data without knowing where they 
 
 \subsection{Backdraws Version 2}
 
-The Obvious backdraw is, that the sensors need to have a constant interent connection. This is obviously not great, especially when we try to develop something for an every usage since we are somewhat bound to a single place. 
+The Obvious backdraw is, that the sensors need to have a constant Internet connection. This is obviously not great, especially when we try to develop something for an every usage since we are somewhat bound to a single place. 
 
-Furthermore if used as a product, these sensors would need to be registered first before usage, this does increase complexity for a first usage however simplifes setup greatly.
+Furthermore if used as a product, these sensors would need to be registered first before usage, this does increase complexity for a first usage however simplifies setup greatly.
 
 
 \input{Chapters/04_Version2/identifying_posture.tex}

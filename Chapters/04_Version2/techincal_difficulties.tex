@@ -5,7 +5,7 @@ Independent of the communication protocol, there are some issues, or difficultie
 One big issue with movement data, is that is only usable when the measured target is not moving while sitting. For example a bus driver would not be able to get correct data, since the sensors would not only measure the movement of the driver but also the movement of the bus. To fix this another sensor would need to be attached to the bus itself to subtract the movement of the bus. 
 
 Another difficulty especially with roll, pitch and yaw, is the wrap around. The Sensor might be in a state where his pitch is 0 degrees and one degree of movement would lead to a new pitch value of 359 degrees of pitch. This is not a very difficult problem, however when not addressed leads to almost unusable data. 
-For the visualisation and it does not matter however when trying to tell the user how many degrees he is off his target, a special calculation needed to be implemented:
+For the visualisation and it does not matter however when trying to tell the user how many degrees he is off his target, a special calculation needed to be implemented \cite{javaHowd16:online}:
 
 \begin{lstlisting}
 function GetAngleDifference(from, to)
@@ -16,3 +16,4 @@ function GetAngleDifference(from, to)
         return distance;
 }
 \end{lstlisting}
+

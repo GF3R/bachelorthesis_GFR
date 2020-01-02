@@ -24,7 +24,7 @@ function getRoll(x, y, z) {
 }
 \end{lstlisting}
 
-With these formula the position of the sensor was really simple to read and visualise and i realised that one sensor would not be enough, since its position does not offer enough information about the posture: 
+With these formula the position of the sensor was really simple to read and visualise. However when working with the literal data which is sent from the sensor there is a lot of jitter, which meant that the data was not very readable or meaningful, therefore i decided to visualise the median of a 10 second measurement, since the refresh rate is not very important. It was also clear that one sensor would not be enough, since its position does not offer enough information about the posture: 
 
 \begin{figure}[h]
   \begin{center}

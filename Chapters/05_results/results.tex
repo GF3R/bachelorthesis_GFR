@@ -6,22 +6,54 @@ During my thesis i learnt a lot about posture and sensors and achieved a great b
 
 \section{Achieved Goals}
 
-Transferring data
-Simplyfied "sensor packets"
-Improved reusability
-Detecting posture
-Visualsing posture
+In the evolution of this project. I simplified the data transfer and created a first definition how the sensors can be "dumb". Thanks to this the "sensor packets" got much simpler and need much less soldering. I was able to move all logic from the devices to any language or system desired without losing any significant response time. 
 
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=\textwidth]{images/DumbSensor.png}
+  \end{center}
+  \caption{Sensor workflow}
+  \label{fig:SensorWorkflow}
+\end{figure}
+
+With the flow displayed above (\ref{fig:SensorWorkflow}) the sensors can all have the same logic and only need  a unique id and no further setup. it needs to be noted, that this was not fully implemented for this thesis, however it was mocked. 
+
+Thanks to these adjustments and improvements during this project, live data visualisation was achieved. This is on one hand a cool feature however it also simplifies the analysis and understanding of the collected data vastly. It helped me really understand the data and transfer it to a simple posture model. Which then enabled me to visualise the positioning of the sensors and the posture. Additionally thanks to my better understanding of the sensor data and collected data, how it can be used to model posture and my experience gained through the first versions, I know how a single self contained sensor pack could be implemented. This would be easier to user however much more restricted. 
+
+Also due to the abstraction of logic, it became much easier working with the data and I think it also improved the re-usability, since logic can be implemented in any language desired and is not restricted to c++.
 
 \section{Open Goals}
 
-Usable product
-User friendlyness
-Self provisoning
+From my goal of creating a simple affordable solution to improve posture, a lot has been achieved. Nontheless I did not create the type of solution I first had in mind. I would not consider this a problem, since the current solution is much more flexible. However my first goal, which i tried to achieve in the first version, was a single contained unit which achieves posture improvements. This would be possible with the knowhow i have now and will also be kept as a long term goal. However i feel that much more can be achieved with the distributed network i have implemented currently. 
+
+Currently this sensor network is a simple proof of concept and I will definitely need to implemented some things I have mocked to create a usable and user friendly product.  The Register service would need to be implmented and also the web app needs a lot more work. It is currently not very user friendly and only configured to work with my 3 sensors. 
+
+Furthermore when the register service is available the sensors need more work, to enable a complete self provisioning, since currently the network connection is hard coded. This is not very interesting or hard since it has been implemented multiple times (https://www.arduino.cc/en/Reference/WiFiNINABeginProvision), therefore i left it out. 
+
+Security also is an issue that was only thought of however not implemented correctly. Currently the MQTT Broker is a secured by credentials however these also are hard-coded and would need to be different for every user. MQTT offers this possibility and also encrypts the messages.
+
+Lastly the size of the sensor packets is far from optimal and could be drastically reduced by creating a single plate with all logic withing. This will not be a goal that I will tackles soon, since this would be the last step of creating such a "product".
 
 \section{Similar Products}
 
-SMING
+\subsection{sming}
+
+\begin{wrapfigure}{R}{0.15\textwidth}
+  \begin{center}
+\includegraphics[width=\linewidth]{images/sming_pic2.jpg}
+  \end{center}
+  \caption{\label{fig:swaystar}Swaystar}
+\end{wrapfigure}
+A Very important part of any "new" product is investigating what already exists on the market.
+Usually someone already had a similar idea, or something which tries to solve the same problems has already been produced. 
+
+The first similar product i would like to name is the "SMING" which is a sensor node created with the BFH. 
+It is using the Sensor "TXW51" which has an acceleromter and a gyroscope. This devices uses Bluetooth smart to communicate. It was created for a master thesis and is a great example of how small such a device can be. 
+
+It was planned to use the device for sports measurement and was designed to very energy efficient. However according to my know-how the device never has been in use productively. \cite{sming:book}
+Such a device and the know-how gathered for this projects might be a great starting point when designing a "all in one" sensor packet for my usecase. "SMING" might offer a lot even when used as is. This will need to be evaluated in the near future.
+
+\subsection{Swaystar}
 
 \begin{wrapfigure}{R}{0.15\textwidth}
   \begin{center}
@@ -29,14 +61,12 @@ SMING
   \end{center}
   \caption{\label{fig:swaystar}Swaystar}
 \end{wrapfigure}
-A Very important part of any "new" product is investigating what already exists on the market.
-Usually someone already had a similar idea, or something which tries to solve the same problems has already been produced. 
 
-In my case, an existing product was the trigger for my project idea. The so called swaystar \ref{fig:swaystar} offers almost the same functionality, however it is at least 10 times bigger and costs about 10'000 CHF. 
+The following existing product was the trigger for my project idea. The so called swaystar \ref{fig:swaystar} offers almost the same functionality, however it is at least 10 times bigger and costs about 10'000 CHF. 
 I have never used such a device, however i have talked to people who worked with one. Apparently it tracks the movement / positioning of users and stores the data. An additional headband can be purchased with which vibrations are sent to the user so he can improve his body ergonomics and balance. 
 
 As said, it offers a very similar functionality, however not it covers the same use cases. Due to the size and price it can almost exclusively only be used in therapies and by medical professionals. My device intends to target the end user, and offer an easier and more affordable solution. The swaystar also is closed-source and appears to be a rather old product.
-
+\cite{SwayStar47:online}
 
 \newpage
 
@@ -48,6 +78,8 @@ As said, it offers a very similar functionality, however not it covers the same 
   \label{fig:gotrainer}
 \end{wrapfigure}
 
+\subsection{Go Posture trainer}
+
 Further investigations into other products, were almost fruitless. There are some apps which offer almost the same thing I have tried to achieve with my app, but a bit more refined and there is one product which offers a use-case that could be considered equal to the first defined use-case (improved sitting posture), at least on first glance (\ref{fig:gotrainer} Go Trainer). 
 
 The product functions as a posture trainer, however it has to be attached to the back, and it is, even if small, quite visible under a shirt. Secondly the device only offers a mono-directional biofeedback. \cite{HowToImp2:online}
@@ -58,7 +90,11 @@ Most other devices to improve posture use cloth to physically "pull" the user in
 
 After all these investigations and also further investigations into the medical field I considered my device to still be an innovation, offering something which is not yet available on the market.
 
+\newpage
+
 \section{Learnings}
+
+Firslty I understood how the MPU6050 sensor works with the wire library, learned much more about Arduino coding. I also learned the communcation with other sensors and actors, like the sd card reader or the real time clock. Furthermore I lernead what to be aware of when working with micro-controllers, how to setup a simple client server network with minimal resources. All of this was necessary to achieve a simplified and usable sensor pack. 
 
 Amount of sensors needed
 Positioning of sensor for useful posture
