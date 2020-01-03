@@ -1,25 +1,25 @@
 \section{Identifying Posture}
 
-The Biggest hurdle, was and still is identifying and correctly analysing the data. I have had several different aproaches on how to interpret and visualize the data. During my first attempt (Attemt A) i tried to visualized the data in two ways, with Python and Power BI.
+The Biggest hurdle, was and still is identifying and correctly analysing the data. I have had several different approaches on how to interpret and visualise the data. During my first attempt (Attempt A) i tried to visualised the data in two ways, with Python and Power BI.
 
 Firstly I transformed the data into a CSV which is a commonly used format viable for many different applications
 
-According to the datasheet of the MPU6050 the collected data is "g-force". The accelometer measure in mg and the gyroscope in º/s. 
+According to the datasheet of the MPU6050 the collected data is "g-force". The accelerometer measure in mg and the gyroscope in º/s. 
 
 \includegraphics[width=\linewidth]{images/MPU6050_DATA.png}
 The entire documentation can be found online \cite{MPU6000D59:online}.
 
 \subsection{Visualising with Python}
 
-I tried to visualize the data using python since it was recommended on a few forums and seamed to be feasible for this task. It actually did work quite well and I have achieved within 2 Days with Python. I have never worked with python before and was happy that I managed to use and apply it within days. 
+I tried to visualise the data using python since it was recommended on a few forums and seamed to be feasible for this task. It actually did work quite well and I have achieved within 2 Days with Python. I have never worked with python before and was happy that I managed to use and apply it within days. 
 
 \includegraphics[width=\linewidth]{images/PyVisualisation.png}
 
-Visualised you see my first attempt in showing movement of 3 sensors with the data of the accelometers. The sensors were attached to my shirt with scotch. This is not a perfect solution, which is visible in the different orientation of the green dots. 
+Visualised you see my first attempt in showing movement of 3 sensors with the data of the accelerometers. The sensors were attached to my shirt with scotch. This is not a perfect solution, which is visible in the different orientation of the green dots. 
 
-Here I tried to add up the movement from the accelometers to see how this stacks up. The Data was not very helpful and i tried to anime the accelometer data directly to see how it changes, this was a bit clearer but still very hard to interpret since it was static data. 
+Here I tried to add up the movement from the accelerometers to see how this stacks up. The Data was not very helpful and i tried to anime the accelerometer data directly to see how it changes, this was a bit clearer but still very hard to interpret since it was static data. 
 
-To Visualize I used numpy and matplotlib which are quite handy but still took some time the get used to.
+To visualise I used numpy and matplotlib which are quite handy but still took some time the get used to.
 The data was simple display on a grapth (ax) from np arrays:
 
 \begin{lstlisting}
@@ -30,9 +30,9 @@ ax.scatter3D(XSZAcc[:,0],XSZAcc[:,1],XSZAcc[:,2], c=XSZAcc[:,2], cmap='Greens')
 
 \subsection{Visualising with Power BI}
 
-Power BI is a very powerfull tool which I was already used to, since we used it at work to visualize project data and quality gates. Therefore it was much easier for me to visualise the data.
+Power BI is a very powerfull tool which I was already used to, since we used it at work to visualise project data and quality gates. Therefore it was much easier for me to visualise the data.
 
 \includegraphics[width=\linewidth]{images/PowerBIVisualisiation.png}
 
-During different attempts of visualising the data i realised, it made sense to visualise it with a 2d graph, since the three dimensional visualisation did not offer any real benefits. Furthermore during this visualisation I also quickly saw, that the data collected had to be incorrect, since the accelometer should never fluctuate as much as id did. The Error was in my code and was quickly fixed, however I still had issues making conclusions for this static data.
+During different attempts of visualising the data i realised, it made sense to visualise it with a 2d graph, since the three dimensional visualisation did not offer any real benefits. Furthermore during this visualisation I also quickly saw, that the data collected had to be incorrect, since the accelerometer should never fluctuate as much as id did. The Error was in my code and was quickly fixed, however I still had issues making conclusions for this static data.
 

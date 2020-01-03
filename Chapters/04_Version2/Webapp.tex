@@ -4,7 +4,7 @@ The visualisation of static data has a lot of issues, especially when the data i
 
 This was achieved with a simple C\# MVC website which subscribes to the MQTT broker. Here the switch to MQTT and the extra effort for this switch, was highly beneficial.
 
-The Website started small and was simply used to visualize the collected data:
+The Website started small and was simply used to visualise the collected data:
 
 \includegraphics[width=\linewidth]{images/WebVisualisation_SIMPLE.png}
 
@@ -26,7 +26,7 @@ function getRoll(x, y, z) {
 
 With these formula the position of the sensor was really simple to read and visualise. However when working with the literal data which is sent from the sensor there is a lot of jitter, which meant that the data was not very readable or meaningful, therefore i decided to visualise the median of a 10 second measurement, since the refresh rate is not very important. It was also clear that one sensor would not be enough, since its position does not offer enough information about the posture: 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
 \includegraphics[width=0.3\textwidth]{images/Backposition.png}
   \end{center}
@@ -38,12 +38,12 @@ Therefore a minimum of two sensor would definitely be need to make general concl
 
 Through the MQTT-Broker the data of three sensors is sent as JSON. In the JSON is the UID of the sensor with which it is identified. Then the data is parsed and passed through a javascript library (plot.ly) \cite{ModernAn18:online} to create the graphs. To simplify the analysis of the data i further also knew the position of each sensor:
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
 \includegraphics[width=0.3\textwidth]{images/ChairVisualised.png}
   \end{center}
   \caption{Sensor position}
-  \label{fig:BackPos}
+  \label{fig:SensorPos}
 \end{figure}
 
 After some research, testing and discussion with a physiotherapist, we realised, that the approach of trying to set a general goal for all users was not correct, in many ways. Different studies found that posture is a very individual thing and cannot be set globally \cite{SitUpSt77:online} therefore we decided to implement functionality so that each user can set his/her own individual goals. I will get further into these decision in the \ref{chap:Results}.
@@ -57,12 +57,12 @@ Now every sensor has a calibrated optimal value. Each deviation of this optimal 
 
 These modes are visualised as below. In the circle you see a red line and a green line. Here the avoid mode is visualised where the red line is the position the user would like to avoid and the green line is his current position.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
 \includegraphics[width=\textwidth]{images/WebAppCircle.png}
   \end{center}
   \caption{Target position}
-  \label{fig:BackPos}
+  \label{fig:TargetPosition}
 \end{figure}
 
 The second mode is very similar, however a position the user would like to avoid is programmed and the sensor react when the user gets to close to this position rather than to far away. 

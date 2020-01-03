@@ -3,16 +3,16 @@
 \renewcommand{\thesection}{\arabic{section}}
 \setcounter{section}{0}
 
-After my first attempts and some discussion with my supervisor i realized that the solution is to distribute the system and send the data wirelessly. This enables me to add additional sensors without having issues with the Wire library. However this increases the cost and complexity of each sensor slightly, since each sensor needs some sort of "brain", which handles the connection and communciation. 
-However it reduces the complexity of the construction and the entire solution drasticly since it has single services talking ot each other and not an entier blob of logic. 
+After my first attempts and some discussion with my supervisor I realised that the solution is to distribute the system and send the data wirelessly. This enables me to add additional sensors without having issues with the Wire library. However this increases the cost and complexity of each sensor slightly, since each sensor needs some sort of "brain", which handles the connection and communication. 
+However it reduces the complexity of the construction and the entire solution drastically since it has single services talking to each other and not an entire blob of logic. 
 
 \section{Attempt 1 - Local Client Server Network}
 
-The communication wase firstly achieved via WIFI since I know the protocol and can get it running swiftly. Also the esp32 I have been using has WIFI natively enabled. 
-An issue with wireless communication is the synchronisation of the data flow. To simplify the process and due to lack of knowhow and time to achieve a correct synchronisation I will ignore it, while knowing the data might be timeshifted. 
+The communication was firstly achieved via WIFI since I know the protocol and can get it running swiftly. Also the esp32 I have been using has WIFI natively enabled. 
+An issue with wireless communication is the synchronisation of the data flow. To simplify the process and due to lack of know how and time to achieve a correct synchronisation I will ignore it, while knowing the data might be time shifted. 
 This might be an issue when visualising and analysing the data, but will be tackled then.
 
-Forthermore for the communication via WIFI a simple "Client Server" protocoll was used which has already been widely implement in ESP32.
+Furthermore for the communication via WIFI a simple "Client Server" protocol was used which has already been widely implement in ESP32.
 
 Server Client Request: 
 \begin{lstlisting}
@@ -92,41 +92,41 @@ void loop () {
 \end{lstlisting}
 
 The Data will be sent 10 times per second for evaluation purposes. 
-However I hope and think this can be reduced, since we hopefully will not need that much data to determine how to usere i positioned. This would enable us to aggregate the data on the devices, which is a benefit only achievable by the current configuration of "Smart-sensors".
+However I think this can be reduced, since we hopefully will not need that much data to determine how to user is positioned. This would enable us to aggregate the data on the devices, which is a benefit only achievable by the current configuration of "Smart-sensors".
 
-The Data is saved onto an SD Card, this works well and enables to analyse de Data afert measuring it for a while. This Concept worked quite well, hovewer it has some major flaws. 
+The Data is saved onto an SD Card, this works well and enables to analyse the Data after measuring it for a while. This Concept worked quite well, however it has some major flaws. 
 
 \section{Flaws of Attempt A}
 
-The Idea of saving all the data locally came with the plan to have everything locally which then in a further step could be sent the a smartphone or a laptop without any interent. Maybe with bluetooth or a local hotspot. 
+The Idea of saving all the data locally came with the plan to have everything locally which then in a further step could be sent the a smartphone or a laptop without any internet. Maybe with Bluetooth or a local hotspot. 
 
-During the development and testing of this concept, it turned out that the client server network was not very stable and it required much more hardware than i woud have liked. 
+During the development and testing of this concept, it turned out that the client server network was not very stable and it required much more hardware than i would have liked. 
 The Server needed a few modules for it to work, as show below:
 
 \includegraphics[width=\linewidth]{images/CommunicationDiagrammExplenation.png}
 
-This does not look like mucht but both of these elementes, the RTC and the SD Card reader, add an adtional point of failure, are quite complex and need to be configured additionally. Additionaly many different kinds of RTC and SD Card reader exists which do not have the exact same communication protocol, which is a big flaw, when trying to create something opensource and usefull. All this felt like quite the hassle and i soon realized I need to find a new way to communicate.
+This does not look like much but both of these elements, the RTC and the SD Card reader, add an additional point of failure, are quite complex and need to be configured additionally. Additionally many different kinds of RTC and SD Card reader exists which do not have the exact same communication protocol, which is a big flaw, when trying to create something open-source and useful. All this felt like quite the hassle and i soon realised I need to find a new way to communicate.
 
-Beside these technical issues the data transfer during the development phase, where bluetooth or hotspot was avaialble was quite awkward since the device need to be stopped and the data needed to be analysed in a spereate step. 
+Beside these technical issues the data transfer during the development phase, where Bluetooth or hotspot was available was quite awkward since the device need to be stopped and the data needed to be analysed in a separate step. 
 
 
 \begin{center}
 \includegraphics[width=0.5\textwidth]{images/CommunicationDiagrammLocal.png}
  \end{center}
-After working with it for a while I tried to find a much simpler way, which is closer to the goal of a simple and affordable sensor set. To Tackle the issues with the client server network i first thought of using a simple http request, which would have a bit more overhead but would be more stable. This however didn't feel right and I realized that the solution, was something I already was quite familiar with. A simple MQTT Broker. 
+After working with it for a while I tried to find a much simpler way, which is closer to the goal of a simple and affordable sensor set. To Tackle the issues with the client server network i first thought of using a simple http request, which would have a bit more overhead but would be more stable. This however didn't feel right and I realised that the solution, was something I already was quite familiar with. A simple MQTT Broker. 
 
 
 
-\section{Atempt 2 - Communication via MQTT}
+\section{Attempt 2 - Communication via MQTT}
 
 After this first attempt i knew how to handle the message and date from the sensors which helped greatly. 
-The Communication in my new attempt was handled with a simple MQTT Broker, which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completly free and easy to apply. 
+The Communication in my new attempt was handled with a simple MQTT Broker, which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completely free and easy to apply. 
 
 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/CommunicationDiagrammMQTT.png}
 \end{center}
-MQTT uses a simple publish subscribe protocoll which I have already implemented a few times.
+MQTT uses a simple publish subscribe protocol which I have already implemented a few times.
 Below you see the whole setup and loop code, which is almost readable thanks to helper functions:
 \begin{lstlisting}
 void setup() {
@@ -202,7 +202,7 @@ void setAvg(){
   }
 }
 \end{lstlisting}
- and created a json from the collected data in the "getMessage()" function which was sent every second: 
+ and created a JSON from the collected data in the "getMessage()" function which was sent every second: 
 \begin{lstlisting}
 char* getMessage(){
   char* a = "{ \"id\": \"";
@@ -246,10 +246,10 @@ char* getMessage(){
   return messagebuffer;
 }
 \end{lstlisting}
-As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the mqtt Library could not handle "arduino" Strings and therefore needed char* which are a mess to work with.  Thats also why a grave error occured in this function. The lines which are commented out, were my first implementation which work but give wrong data since it does not access to expected array or data.
-This mistake was unforunately only discovered when visualising the data, since C++ does not throw any errors when accesing items out of the array, and simply returns the values in the adresses accessed.
+As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the mqtt Library could not handle "arduino" Strings and therefore needed char* which are a mess to work with. That is also why a grave error occurred in this function. The lines which are commented out, were my first implementation which work but give wrong data since it does not access to expected array or data.
+This mistake was unfortunately only discovered when visualising the data, since C++ does not throw any errors when accessing items out of the array, and simply returns the values in the addresses accessed.
 
-Dr. König showed me protobuf which I will try to implement as well, however protobuff does take some time to implement. Nontheless after some tinkering i finally managed to get a nice JSON message over the MQTT Broker: 
+Dr. K\"{o}nig showed me protobuf which I will try to implement as well, however protobuff does take some time to implement. Nontheless after some tinkering i finally managed to get a nice JSON message over the MQTT Broker: 
 \begin{lstlisting}
 { 
     "id": "SENSOR-XSZ", 
@@ -258,7 +258,7 @@ Dr. König showed me protobuf which I will try to implement as well, however pro
 }
 \end{lstlisting}
 
-Additionally I enabled all devices to be calibrated remotely. This since when i put these devices on I will ned to calibrate them after they are set in position. This is quite a simple task with MQTT since the clients can simply subscribe to a topic, from which they get messages: 
+Additionally I enabled all devices to be calibrated remotely. This since when i put these devices on I will need to calibrate them after they are set in position. This is quite a simple task with MQTT since the clients can simply subscribe to a topic, from which they get messages: 
 
 \begin{lstlisting}
 void callback(char* topic, byte* message, unsigned int length) {
@@ -285,9 +285,9 @@ This callback gets registered when connecting to the mqtt broker.
 
 The benefits of managing the messages via a MQTT Broker was, that I could get the messages and work with them from any device with an Internet connection. This means that any calculation heavy tasks can be done from a "real" computer which handles these much better. 
 
-This also enabled me to visualise and analyze the data in real-time which made it much easier. 
+This also enabled me to visualise and analyse the data in real-time which made it much easier. 
 
-Furthermore it also achieves the goal of being cheap and affordable. Since we now only need MPU6050 and micrcontrollers to send the data and this can be setup much easier than with an ESP32 "server".
+Furthermore it also achieves the goal of being cheap and affordable. Since we now only need MPU6050 and microntrollers to send the data and this can be setup much easier than with an ESP32 "server".
 
 This also means that there does not need to be any more logic on the devices itself since everything can be done from a Computer. Maybe some sort of vibration device will be added which however also can be activated via the MQTT Broker. 
 

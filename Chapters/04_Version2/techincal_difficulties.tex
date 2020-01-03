@@ -1,6 +1,6 @@
 \section{Technical Difficulties}
 
-Independent of the communication protocol, there are some issues, or difficulties when trying to visualize and interpret accelometer and gyrometer data.  
+Independent of the communication protocol, there are some issues, or difficulties when trying to visualise and interpret accelerometer and gyroscope data.  
 
 One big issue with movement data, is that is only usable when the measured target is not moving while sitting. For example a bus driver would not be able to get correct data, since the sensors would not only measure the movement of the driver but also the movement of the bus. To fix this another sensor would need to be attached to the bus itself to subtract the movement of the bus. 
 
@@ -17,3 +17,4 @@ function GetAngleDifference(from, to)
 }
 \end{lstlisting}
 
+The synchronisation of the data was expected to be an issue, however since the data collected is not very time sensitive, and I only react to an average collected every 10 seconds the synchronisation should not be an issue. Furthermore MQTT has a latency of "little above 120 milliseconds" \cite{Measurin4:online} which should be fast enough for my current scenario. This might be an issue in further steps of this project. I go into this issue in the chapter "Prospects".

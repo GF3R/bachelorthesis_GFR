@@ -1,5 +1,5 @@
 \chapter*{The first attempts}
-\label{chap:Technical Basics}
+\label{chap:The first attempts}
 \renewcommand{\thesection}{\arabic{section}}
 \setcounter{section}{0}
 
@@ -9,7 +9,7 @@ The interesting part of this project is the simplicity and low-technicality. Or 
 
 As mentioned was the first approach an android App. This was chosen as a first test environment, because the standard android phone offers all necessary actors and sensors: 
 \begin{enumerate}
-    \item Accelometer
+    \item Accelerometer
     \item Gyroscope
     \item Vibrators
     \item Storage
@@ -26,11 +26,11 @@ The next plan was to create a simple IoT solution. Put on some actors some senso
 
 The ESP32 was chosen, since it offers everything you can imagine. It has a built in Bluetooth module, Wifi module and supports nearly all modern Android libraries and components. On top of that the ESP32 is really cheap. It can be bough from Swiss sellers for about 15 CHF and if time does not matter it can be imported via aliexpress for as low as 2-5 CHF. Therefore I considered it to be a perfect contestant for this project. 
 
-Additionally to the micro-controller a few more items are needed to complete the project. A Gyroscope, Accelometer, Vibrators, A Real Time Clock (RTC) and a SD-Card module. The RTC is needed since we want to log the measured values, and to analyse or visualise these logs, a time-stamp is necessary. 
+Additionally to the micro-controller a few more items are needed to complete the project. A Gyroscope, Accelerometer, Vibrators, A Real Time Clock (RTC) and a SD-Card module. The RTC is needed since we want to log the measured values, and to analyse or visualise these logs, a time-stamp is necessary. 
 
 All modules I have used, are used in so called breakout boards. These make the testing and development easier by offering pin-out and -in to enable swift testing. Without breakout boards the parts would be a lot smaller, however not suitable for a first prototype since it would complicate the development process.
 
-\subsection{The Gyroscope and Accelometer}
+\subsection{The Gyroscope and Accelerometer}
 
 After some investigating, what modules are available on the market, I have decided to go with the 
 MPU6050 Chip since it is widely used and is documented very well. 
@@ -43,13 +43,13 @@ MPU6050 Chip since it is widely used and is documented very well.
   \label{fig:MPU6050}
 \end{wrapfigure}
 
-The MPU6050 communicates via the \textbf{Wire library} and has a built in thermometer, accelometer and gyroscope. The module is also really tiny even if it is a breakout board.
+The MPU6050 communicates via the \textbf{Wire library} and has a built in thermometer, accelerometer and gyroscope. The module is also really tiny even if it is a breakout board.
 Without the breakout board this sensor would be reduced to the black square since in the picture  (\ref{fig:MPU6050}).
 
 The MPU6050 is documented very precisely which was a great help during development and made it quite easy to get the values. This Chip would offer a possibility to calculate some things directly on the Chip, however this part of the MPU6050 is a bit obfuscated and would increase the complexity vastly without offering real benefits. This however might be something, which will be considered in further development steps of this project.
 
-The MPU has a very high complexity and it was quite a challenge to understand all the data, that the device provides. Especially reading the data showed to be much harder than expected. However after some research and a lot of testing, it turned out to be much easier than firstly expected, since I was able to read the gravity which affects the accelometer.
-Currently only the values of the accelometer are used to determine the position and sense the direction in which the user is leaning. This might be a bit to simple for the ergonomic use case, however it is a good starting point and no technical modification are needed to get additional values.
+The MPU has a very high complexity and it was quite a challenge to understand all the data, that the device provides. Especially reading the data showed to be much harder than expected. However after some research and a lot of testing, it turned out to be much easier than firstly expected, since I was able to read the gravity which affects the accelerometer.
+Currently only the values of the accelerometer are used to determine the position and sense the direction in which the user is leaning. This might be a bit to simple for the ergonomic use case, however it is a good starting point and no technical modification are needed to get additional values.
 
 The Code for the calculation and reading of values is quite complex and really long. Therefore I will not put any code snippets in this sections since they would not provide the desired benefits to the reader. However the whole source code will be attached to this paper, with the source of the code. \cite{TDKAttra32:online}
 
@@ -203,7 +203,7 @@ Another bigger issue was the specific hardware I used, without knowing it. My De
         \label{fig:Belt}
 \end{wrapfigure}
 
-After these first attempts I created a simple proof of concept, which is able to read the MPU Data and interpret it to a degree, where i can tell in what direction the user is leaning. So to say, if the broom has fallen or not. This is achieved by simply reading out the accelometer data and determining the exact position. Furthermore at the beginning of each power-on phase, a baseline reading is done to see the difference in gait. This baseline reading currently contains of the first second of data. Then a threshold is defined, which is currently defined as follows:
+After these first attempts I created a simple proof of concept, which is able to read the MPU Data and interpret it to a degree, where i can tell in what direction the user is leaning. So to say, if the broom has fallen or not. This is achieved by simply reading out the accelerometer data and determining the exact position. Furthermore at the beginning of each power-on phase, a baseline reading is done to see the difference in gait. This baseline reading currently contains of the first second of data. Then a threshold is defined, which is currently defined as follows:
 
 \begin{lstlisting}
  if(baseZacc - (az * 1000) < -150){
@@ -232,5 +232,5 @@ The power-source still is outside of the belt, in the form of a lipo battery whi
 
 \section{Learnings}
 
-After my first attempts i quickly realized, that connecting all the sensors via cable limited me drasticly due to the restircitons of the Wire.h library. With the current configuration some sort of multiplexer, or custom created accelometers and gyroscopes would be needed. Since custom parts deffinelty are not an option (yet) and multiplexers add unnecessary complextion to the project, I have been looking for another solution. The solution should enable me to cale up the number sensors. The solution was found and is described in the \ref{chap:Technical CHallenges}
+After my first attempts i quickly realized, that connecting all the sensors via cable limited me drastically due to the restrcitons of the Wire.h library. With the current configuration some sort of multiplexer, or custom created accelerometers and gyroscopes would be needed. Since custom parts definitely are not an option (yet) and multiplexers add unnecessary complexity to the project, I have been looking for another solution. The solution should enable me to scale up the number sensors. The solution was found and is described in the \ref{chap:Technical CHallenges}
 
