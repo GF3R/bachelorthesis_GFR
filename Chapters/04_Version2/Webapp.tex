@@ -34,7 +34,8 @@ With these formula the position of the sensor was really simple to read and visu
   \label{fig:BackPos}
 \end{figure}
 
-Therefore a minimum of two sensor would definitely be need to make general conclusions from the data. The visualisation was expanded to three to improve the analysis of the data.  The Idea was to calculate the degrees between each sensor to check whether the user has a bent back. This was later overturned, however I might get back to that idea since it would enable the user to have more flexibility when moving, since it would allow for the whole back to move correctly without triggering a warning.
+Therefore a minimum of two sensor would definitely be needed to make general conclusions from the data. This due to the fact, that posture can change on the lower or the upper back. Which means it is possible that the upper back stays straight however the lower back is buckled or the other way around. 
+The default visualisation was then expanded to three to improve the analysis of the data.  The Idea was to calculate the degrees between each sensor to check whether the user has a bent back. This was later overturned, however I might get back to that idea since it would enable the user to have more flexibility when moving, since it would allow for the whole back to move correctly without triggering a warning.
 
 Through the MQTT-Broker the data of three sensors is sent as JSON. In the JSON is the UID of the sensor with which it is identified. Then the data is parsed and passed through a javascript library (plot.ly) \cite{ModernAn18:online} to create the graphs. To simplify the analysis of the data i further also knew the position of each sensor:
 
