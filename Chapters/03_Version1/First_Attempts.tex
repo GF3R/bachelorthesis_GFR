@@ -230,7 +230,11 @@ Furthermore there are four vibrators  which vibrate in the direction the "broom 
 
 The power-source still is outside of the belt, in the form of a lipo battery which is simply connected via a micro usb cable.
 
+The data collected has will need to be analysed in-depth. Furthermore it appears that one single sensor does not offer the needed results or precision.
+
 \section{Learnings}
 
-After my first attempts i quickly realized, that connecting all the sensors via cable limited me drastically due to the restrcitons of the Wire.h library. With the current configuration some sort of multiplexer, or custom created accelerometers and gyroscopes would be needed. Since custom parts definitely are not an option (yet) and multiplexers add unnecessary complexity to the project, I have been looking for another solution. The solution should enable me to scale up the number sensors. The solution was found and is described in the \ref{chap:Technical CHallenges}
+After my first attempts i quickly realized, that connecting all the sensors via cable limited me drastically due to the restrcitons of the Wire.h library. With the current configuration some sort of multiplexer, or custom created accelerometers and gyroscopes would be needed. Since custom parts definitely are not an option (yet) and multiplexers add unnecessary complexity to the project, I have been looking for another solution. The solution should enable me to scale up the number sensors. 
+
+Furthermore the current cable management and hardware complexity is higher than desired and will deffinetly need to be simplified.
 

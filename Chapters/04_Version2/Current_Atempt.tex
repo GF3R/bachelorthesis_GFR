@@ -304,6 +304,14 @@ Furthermore if used as a product, these sensors would need to be registered firs
 
 \input{Chapters/04_Version2/Webapp.tex}
 
+
+\section{Hardware}
+
+The Implementation with MQTT not only simplifies the communication but also reduces the hardware complexity greatly. The only parts needed are an MPU6050 a vibration unit and some sort the micro-controller. Since MPU and vibration unit are suitable with almost any micro-controller there are almost no restrictions left. Additionally even the accelerometer and gyroscope hardware could be changed. The only restriction to analyse the data, is that the data is sent in the same JSON format. 
+
+As a second prototype a different micro controller was used, which was smaller and worked with a small battery unit. This enabled me to already reduce the size of the sensor module. Any additional function like LED's for demonstration purposes can also simply be added and used in place of a vibration unit.
+
+Currently the hardware all together costs my, even when bought in Switzerland and as a single unit, about 20 CHF. When bought from china, still as single units, the price can be reduced to about 12 CHF. I would estimate that the price could be lowered further, when buying in bulk, to about 5 CHF.
+
+
 \input{Chapters/04_Version2/techincal_difficulties.tex}
-
-
