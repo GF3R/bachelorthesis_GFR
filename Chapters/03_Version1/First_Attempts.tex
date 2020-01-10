@@ -9,26 +9,26 @@ The interesting part of this project is the simplicity and low-technicality. Or 
 
 As mentioned was the first approach an android App. This was chosen as a first test environment, because the standard android phone offers all necessary actors and sensors: 
 \begin{enumerate}
-    \item Accelerometer
-    \item Gyroscope
+    \item Accelerometer - To Detect Acceleration
+    \item Gyroscope - To Detect Orientation
     \item Vibrators
     \item Storage
 \end{enumerate}
 
 This means it was quite simple to check position and pitch, and react when the pitch was to high by vibrating. This is quite simple to achieve and did work as expected.
 
-However the usability was not great and it did not feel very professional. The phone had to be held and placed near the chest to even work. This would mean the first use case, improving the sitting position, was not achievable without a second phone or the compromise of not using your phone while you work, which seems to me, unmanageable. Therefore the android app idea was quickly put aside. Since, for now at least, it does not offer what is desired.
+however, the usability was not great and it did not feel very professional. The phone had to be held and placed near the chest to even work. This would mean the first use case, improving the sitting position, was not achievable without a second phone or the compromise of not using your phone while you work, which seems to me, unmanageable. Therefore the android app idea was quickly put aside. Since, for now at least, it does not offer what is desired.
 
 \newpage
 \section{The IoT Solution}
 
 The next plan was to create a simple IoT solution. Put on some actors some sensors and done. At least that is what i thought would happen. The Device is running on a Microcontroller, an ESP 32, specifically an ESP32 WEMOS Lolin V1.0.0. The very specific version is quite important. I will go further in depth into why, in the \textbf{difficulties}.
 
-The ESP32 was chosen, since it offers everything you can imagine. It has a built in Bluetooth module, Wifi module and supports nearly all modern Android libraries and components. On top of that the ESP32 is really cheap. It can be bough from Swiss sellers for about 15 CHF and if time does not matter it can be imported via aliexpress for as low as 2-5 CHF. Therefore I considered it to be a perfect contestant for this project. 
+The ESP32 was chosen, since it offers everything you can imagine. It has a built in Bluetooth module, Wifi module and supports nearly all modern Android libraries and components. On top of that the ESP32 is really cheap. It can be bough from Swiss sellers for about 15 CHF and if time does not matter it can be imported via aliexpress.com for as low as 2-5 CHF. Therefore I considered it to be a perfect contestant for this project. 
 
 Additionally to the micro-controller a few more items are needed to complete the project. A Gyroscope, Accelerometer, Vibrators, A Real Time Clock (RTC) and a SD-Card module. The RTC is needed since we want to log the measured values, and to analyse or visualise these logs, a time-stamp is necessary. 
 
-All modules I have used, are used in so called breakout boards. These make the testing and development easier by offering pin-out and -in to enable swift testing. Without breakout boards the parts would be a lot smaller, however not suitable for a first prototype since it would complicate the development process.
+All modules I have used, are used in so called breakout boards. These make the testing and development easier by offering pin-out and -in to enable swift testing. Without breakout boards the parts would be a lot smaller, however, not suitable for a first prototype since it would complicate the development process.
 
 \subsection{The Gyroscope and Accelerometer}
 
@@ -46,12 +46,12 @@ MPU6050 Chip since it is widely used and is documented very well.
 The MPU6050 communicates via the \textbf{Wire library} and has a built in thermometer, accelerometer and gyroscope. The module is also really tiny even if it is a breakout board.
 Without the breakout board this sensor would be reduced to the black square since in the picture  (\ref{fig:MPU6050}).
 
-The MPU6050 is documented very precisely which was a great help during development and made it quite easy to get the values. This Chip would offer a possibility to calculate some things directly on the Chip, however this part of the MPU6050 is a bit obfuscated and would increase the complexity vastly without offering real benefits. This however might be something, which will be considered in further development steps of this project.
+The MPU6050 is documented very precisely which was a great help during development and made it quite easy to get the values. This Chip would offer a possibility to perform some calculation directly on the Chip, however, this part of the MPU6050 is a bit obfuscated and would increase the complexity vastly without offering real benefits. This however, might be something, which will be considered in further development steps of this project.
 
-The MPU has a very high complexity and it was quite a challenge to understand all the data, that the device provides. Especially reading the data showed to be much harder than expected. However after some research and a lot of testing, it turned out to be much easier than firstly expected, since I was able to read the gravity which affects the accelerometer.
-Currently only the values of the accelerometer are used to determine the position and sense the direction in which the user is leaning. This might be a bit to simple for the ergonomic use case, however it is a good starting point and no technical modification are needed to get additional values.
+The MPU has a very high complexity and it was quite a challenge to understand all the data, that the device provides. Especially reading the data showed to be much harder than expected. However, after some research and a lot of testing, it turned out to be much easier than firstly expected, since I was able to read the gravity which affects the accelerometer.
+Currently only the values of the accelerometer are used to determine the position and sense the direction in which the user is leaning. This might be a bit to simple for the ergonomic use case, however, it is a good starting point and no technical modification are needed to get additional values.
 
-The Code for the calculation and reading of values is quite complex and really long. Therefore I will not put any code snippets in this sections since they would not provide the desired benefits to the reader. However the whole source code will be attached to this paper, with the source of the code. \cite{TDKAttra32:online}
+The Code for the calculation and reading of values is quite complex and really long. Therefore I will not put any code snippets in this sections since they would not provide the desired benefits to the reader. However, the whole source code will be attached to this paper, with the source of the code. \cite{TDKAttra32:online}
 
 \newpage
 
@@ -71,11 +71,11 @@ To communicate with the MPU6050 and the RTC, SD Card module the wire library is 
 }
 \end{lstlisting}
 
-The communication is quite simple and worked on the first try. However a difficulty definitely is and will also be, the addresses. The address of these parts is given by their manufacturer and is the same for every part. 
+The communication is very well documented \cite{ArduinoW76:online} and worked on the first try. However, a difficulty definitely is and will also be, the addresses. The address of these parts is given by their manufacturer and is the same for every part. 
 
 \subsection{The Vibrators}
 
-Vibrators are needed to signal to the user where he should correct his position. These are, technically speaking, quite simple, there is a ground and a power input, that's it. In the code, the communication therefore is also quite simple. 
+Vibrators are needed to signal to the user where he should correct his position. These are, technically speaking, very basic, there is a ground and a power input, that's it. In the code, the communication therefore is also not complicated. 
 I have created an enum with which, the port of the vibrators is defined:
 \begin{lstlisting}
   enum VIBROPIN {
@@ -90,14 +90,14 @@ Then the vibration can be triggered by simply using the keyword:
  digitalWrite(RIGHT, HIGH);
 \end{lstlisting}
 
-Even though the technical implementation was quite easy, the sensors are physically very fragile and definitely a week point of the build. They are very cheap and also somewhat easy to replace, however soldering them every time is quite time consuming. Therefore a work around will need to be found. Maybe these vibrators might be exchanged by led's during the development process, since that would be easier to debug and more stable. Additionally it would provide a nice way to demonstrate the functionality. 
+Even though the technical implementation was manageable, the sensors are physically very fragile and definitely a week point of the build. They are very cheap and also replaceable, however, soldering them every time is quite time consuming. Therefore a work around will need to be found. Maybe these vibrators might be exchanged by led's during the development process, since that would be easier to debug and more stable. Additionally it would provide a nice way to demonstrate the functionality. 
 
 
 \subsection{SD Card}
 
-The SD Card reader and RTC module are in the same module which makes it a bit of a special case. This might be an issue in the future since it appears to be discontinued. However it simplified the connecting of the two modules. Therefore I will still look at them individually. 
+The SD Card reader and RTC module are in the same module which makes it a bit of a special case. This might be an issue in the future since it appears to be discontinued. However, it simplified the connecting of the two modules. Therefore I will still look at them individually. 
 
-To access the SD card module, the module "SD.h" was needed. It simplifies any file access drastically. The initialising is quite simple:
+To access the SD card module, the module "SD.h" was needed. It simplifies any file access drastically. The initialising is as follows:
 
 \begin{lstlisting}
 if(!SD.begin()){
@@ -126,7 +126,7 @@ Serial.printf("SD Card Size: %lluMB\n", cardSize);
 \end{lstlisting}
 \cite{BlogofWe42:online}
 
-To append data to a file a helper function is used which interacts a File object which is defined in "FS.h". It enables a simple way to interact with different kinds of files and even create, delete or move folders and files.
+To append data to a file a helper function is used which interacts a File object which is defined in "FS.h". It enables a way to interact with different kinds of files and even create, delete or move folders and files.
 
 \begin{lstlisting}
 void appendFile(fs::FS &fs, const char * path, const char * message){
@@ -154,7 +154,7 @@ appendFile(SD, "/data.txt", "\n");
 
 \subsection{Real Time Clock}
 
-The communication with the RTC also happens via the "Wire.h" library. Furthermore the Timelib library is needed which defines the structure tmElements\_t. This simplifies the reading of the RTC but would not be necessary. To get the time, such a tmElements\_t is passed which gets filled:
+The communication with the RTC also happens via the "Wire.h" library. Furthermore, the Timelib library is needed which defines the structure tmElements\_t. This simplifies the reading of the RTC but would not be necessary. To get the time, such a tmElements\_t is passed which gets filled:
 \begin{lstlisting}
 bool read(tmElements_t &tm)
 {
@@ -185,15 +185,15 @@ bool read(tmElements_t &tm)
 \end{lstlisting}
 \cite{DS1307RT51:online}
 
-This function is used to get the current time. There is also a function which sets the time, which is necessary in a first run the have the correct time. This Time is only needed to create a useful log of the MPU6050 data.
+This function is used to get the current time. There is also a function which sets the time, which is necessary in a first run the have the correct time. This time is needed to create a useful log of the MPU6050 data.
 
 \subsection{Difficulties}
 
-During the technical implementation a few difficulties arose. The biggest one, which nearly killed the whole project, was the wire library. Especially the fix addresses. As luck, or the manufacturers, decided, both the SD Card module and the MPU6050 have the exact same adores \textbf{0x68}. This meant, that communicating while both devices were connected could not work, or at least not reliable. At the moment of realisation, many ideas came to my head, most of the hacky and ugly. I started researching, googling and investigating. I was sure i could not have been the first one with such an issue. After about an hour of freaking out, I have found a nice solution. 
+During the technical implementation a few difficulties arose. The biggest one, which nearly killed the whole project, was the wire library. Especially the fix addresses. As luck, or the manufacturers, decided, both the SD Card module and the MPU6050 have the exact same adores \textbf{0x68}. This meant, that communicating while both devices were connected could not work, or at least not reliable. At the moment of realisation, many ideas came to my head, most of them are hacky and ugly. I started researching, googling and investigating. I was sure i could not have been the first one with such an issue. After about an hour of freaking out, I have found a nice solution. 
 The MPU6050 offers the possibility of changing the address from 0x68 to 0x69! This can be achieved by simply connecting the AD0 port of the MPU to a "High" or 5V input.
 
-Another bigger issue was the specific hardware I used, without knowing it. My Development board was, as mentioned ESP32 WEMOS Lolin V1.0.0. I used this board more by accident, since I did not investigate into the differences of ESP32 micro-controllers. This was only realised, when I ordered additional parts to create a "final" proof of concept (POC). The special properties of the Lolin v1.0.0 is that it provides a 5v output, which is needed by the SD card module. A standard ESP32 microcontroller only provides a 3.3v output. There would be way to route the power source separately from the ESP32, however this was not a feasible change in the last 4 weeks of the project. Luckily a swiss reseller, hat the right parts which were delivery within 3-4 days and saved the day.
-
+Another bigger issue was the specific hardware I used, without knowing it. My Development board was, as mentioned ESP32 WEMOS Lolin V1.0.0. I used this board more by accident, since I did not investigate into the differences of ESP32 micro-controllers. This was only realised, when I ordered additional parts to create a "final" proof of concept (POC). The special properties of the Lolin v1.0.0 is that it provides a 5v output, which is needed by the SD card module. A standard ESP32 microcontroller only provides a 3.3v output. There would be way to route the power source separately from the ESP32, however, this was not a feasible change in the last four weeks of the project. Luckily a swiss reseller, hat the right parts which were delivery within three to four days and saved the day.
+\newpage
 \section{Results}
 
 \begin{wrapfigure}{R}{0.14\textwidth}
@@ -203,7 +203,7 @@ Another bigger issue was the specific hardware I used, without knowing it. My De
         \label{fig:Belt}
 \end{wrapfigure}
 
-After these first attempts I created a simple proof of concept, which is able to read the MPU Data and interpret it to a degree, where i can tell in what direction the user is leaning. So to say, if the broom has fallen or not. This is achieved by simply reading out the accelerometer data and determining the exact position. Furthermore at the beginning of each power-on phase, a baseline reading is done to see the difference in gait. This baseline reading currently contains of the first second of data. Then a threshold is defined, which is currently defined as follows:
+After these first attempts I created a simple proof of concept, which is able to read the MPU Data and interpret it to a degree, where i can tell in what direction the user is leaning. So to say, if the broom has fallen or not. This is achieved by simply reading out the accelerometer data and determining the exact position. furthermore, at the beginning of each power-on phase, a baseline reading is done to see the difference in orientation. This baseline reading currently contains of the first second of data. Then a threshold is defined, which is currently defined as follows:
 
 \begin{lstlisting}
  if(baseZacc - (az * 1000) < -150){
@@ -224,17 +224,17 @@ After these first attempts I created a simple proof of concept, which is able to
      }
 \end{lstlisting}
 
-The base.. is the value which was read in the first second. 
+The baseZacc, baseYacc and baseXacc are the values which was are read in the first second. 
 
-Furthermore there are four vibrators  which vibrate in the direction the "broom is falling", so front, back, left or right. Additionally the data is also recorded into an SD Card with a time-stamp. All these individual parts are soldered together and fitted into a belt which can be worn, which is displayed in the picture on the right.
+furthermore, there are four vibrators  which vibrate in the direction the "broom is falling", so front, back, left or right. Additionally the data is also recorded into an SD Card with a time-stamp. All these individual parts are soldered together and fitted into a belt which can be worn, which is displayed in the picture on the right.
 
 The power-source still is outside of the belt, in the form of a lipo battery which is simply connected via a micro usb cable.
 
-The data collected has will need to be analysed in-depth. Furthermore it appears that one single sensor does not offer the needed results or precision.
+The data collected has will need to be analysed in-depth. furthermore, it appears that one single sensor does not offer the needed results or precision.
 
 \section{Learnings}
 
 After my first attempts i quickly realized, that connecting all the sensors via cable limited me drastically due to the restrcitons of the Wire.h library. With the current configuration some sort of multiplexer, or custom created accelerometers and gyroscopes would be needed. Since custom parts definitely are not an option (yet) and multiplexers add unnecessary complexity to the project, I have been looking for another solution. The solution should enable me to scale up the number sensors. 
 
-Furthermore the current cable management and hardware complexity is higher than desired and will deffinetly need to be simplified.
+furthermore, the current cable management and hardware complexity is higher than desired and will deffinetly need to be simplified.
 

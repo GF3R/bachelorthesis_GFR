@@ -1,12 +1,17 @@
 \section{The Web App}
 
-The visualisation of static data has a lot of issues, especially when the data is dynamic. Since the collected data would have needed to be compared to a video to really understand what was going on and what movement hat what effect. Therefore i decided to implement a small web app which will visualise the data in real time. 
+The visualisation of static data has a lot of issues, especially when the data is dynamic. Since the collected data would have needed to be compared to a video to really understand what was going on. It was hard comprehend what the effect, smaller movement had, on the collected data.  Therefore, I decided to implement a small web app which will visualise the data in real time. 
 
 This was achieved with a simple C\# MVC website which subscribes to the MQTT broker. Here the switch to MQTT and the extra effort for this switch, was highly beneficial.
 
-The Website started small and was simply used to visualise the collected data:
-
+The website started small and was simply used to visualise the collected data:
+\begin{figure}[h]
+  \begin{center}
 \includegraphics[width=\linewidth]{images/WebVisualisation_SIMPLE.png}
+  \end{center}
+  \caption{Simple Web Visualisation}
+  \label{fig:SimpleWebVisualisation}
+\end{figure}
 
 Thanks to this visualisation I was quickly able to understand the data and add additional visualisations and make first conclusions which data was necessary for an in depth analysis. It became clear, that the data needed to be "transferred" into a much more readable format, like pitch, roll and yaw.
 The conversion was quite simple and only needs the acceleremoter data:
@@ -47,16 +52,16 @@ Through the MQTT-Broker the data of three sensors is sent as JSON. In the JSON i
   \label{fig:SensorPos}
 \end{figure}
 
-After some research, testing and discussion with a physiotherapist, we realised, that the approach of trying to set a general goal for all users was not correct, in many ways. Different studies found that posture is a very individual thing and cannot be set globally \cite{SitUpSt77:online} therefore we decided to implement functionality so that each user can set his/her own individual goals. I will get further into these decision in the \ref{chap:Results}.
+After some research, testing and discussion with a physiotherapist, we realised, that the approach of trying to set a general goal for all users was not correct, in many ways. Different studies found that posture is a very individual thing and cannot be set globally \cite{SitUpSt77:online} therefore we decided to implement functionality so that each user can set his/her own individual goals. I will get further into these decision in the chapter "Results".
 
 \subsection{Functionality}
 
-Thanks to this setup, the web app could not only be used to visualise the data but also to add functionality and use this live data to help the user improve his/her posture. This was achieved with two, lets call them, modes. 
+Thanks to distributed setup and the data transfer using the MQTT broker, the web app could not only be used to visualise the data but also to add functionality and use this live data to help the user improve his/her posture. This was achieved with two, lets call them, modes. 
 
 The first mode is the "Goal" mode, where the user can set a goal posture which he would like to achieve and keep. The user clicks to button "calibrate" and then the desired posture needs to be held for at least 10 seconds. 
 Now every sensor has a calibrated optimal value. Each deviation of this optimal value is visualised, and when a threshold is reached a warning is triggered to the user. In the beginning of this project the warning was only visual, however a tactical feedback from the sensor itself was implemented later on.
 
-These modes are visualised as below. In the circle you see a red line and a green line. Here the avoid mode is visualised where the red line is the position the user would like to avoid and the green line is his current position.
+These modes are visualised as below. In the circle in figure \ref{fig:TargetPosition} you see a red line and a green line. Here the avoid mode is visualised where the red line is the position the user would like to avoid and the green line is his current position.
 
 \begin{figure}[ht]
   \begin{center}

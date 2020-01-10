@@ -6,7 +6,7 @@
 After my first attempts and some discussion with my supervisor I realised that the solution is to distribute the system and send the data wirelessly. This enables me to add additional sensors without having issues with the Wire library. However this increases the cost and complexity of each sensor slightly, since each sensor needs some sort of "brain", which handles the connection and communication. 
 However it reduces the complexity of the construction and the entire solution drastically since it has single services talking to each other and not an entire blob of logic. 
 
-\section{Attempt 1 - Local Client Server Network}
+\section{Attempt A - Local Client Server Network}
 
 The communication was firstly achieved via WIFI since I know the protocol and can get it running swiftly. Also the esp32 I have been using has WIFI natively enabled. 
 An issue with wireless communication is the synchronisation of the data flow. To simplify the process and due to lack of know how and time to achieve a correct synchronisation I will ignore it, while knowing the data might be time shifted. 
@@ -100,32 +100,47 @@ The Data is saved onto an SD Card, this works well and enables to analyse the Da
 
 The Idea of saving all the data locally came with the plan to have everything locally which then in a further step could be sent the a smartphone or a laptop without any internet. Maybe with Bluetooth or a local hotspot. 
 
-During the development and testing of this concept, it turned out that the client server network was not very stable and it required much more hardware than i would have liked. 
+During the development and testing of this concept, it turned out that the client server network was not very stable and it required much more hardware than I would have liked. 
 The Server needed a few modules for it to work, as show below:
 
-\includegraphics[width=\linewidth]{images/CommunicationDiagrammExplenation.png}
 
-This does not look like much but both of these elements, the RTC and the SD Card reader, add an additional point of failure, are quite complex and need to be configured additionally. Additionally many different kinds of RTC and SD Card reader exists which do not have the exact same communication protocol, which is a big flaw, when trying to create something open-source and useful. All this felt like quite the hassle and i soon realised I need to find a new way to communicate.
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=\linewidth]{images/CommunicationDiagrammExplenation.png}
+  \end{center}
+  \caption{Client Server Network}
+  \label{fig:ClientServer}
+\end{figure}
+
+This does not look like much but both of these elements, the RTC and the SD Card reader, add an additional point of failure, are quite complex and need to be configured additionally. Additionally many different kinds of RTC and SD Card reader exists which do not have the exact same communication protocol, which is a big flaw, when trying to create something open-source and useful. All this felt like quite the hassle and I soon realised I need to find a new way to communicate.
 
 Beside these technical issues the data transfer during the development phase, where Bluetooth or hotspot was available was quite awkward since the device need to be stopped and the data needed to be analysed in a separate step. 
 
-
-\begin{center}
+\begin{figure}[h]
+  \begin{center}
 \includegraphics[width=0.5\textwidth]{images/CommunicationDiagrammLocal.png}
- \end{center}
-After working with it for a while I tried to find a much simpler way, which is closer to the goal of a simple and affordable sensor set. To Tackle the issues with the client server network i first thought of using a simple http request, which would have a bit more overhead but would be more stable. This however didn't feel right and I realised that the solution, was something I already was quite familiar with. A simple MQTT Broker. 
+  \end{center}
+  \caption{Communication Diagramm Local}
+  \label{fig:CommunicationDiagrammLocal}
+\end{figure}
+After working with it for a while I tried to find a much simpler way, which is closer to the goal of a simple and affordable sensor set. To tackle the issues with the client server network, I first thought of using a simple http request, which would have a bit more overhead but would be more stable. This however did not feel right since I would be running a HTTP server on a microcontroller, which does not offer any benefits over using a "real" server. Furthermore HTTP has way to much overhead for such a scenario. I realised that the solution, was something I already was quite familiar with. A simple MQTT Broker. 
 
 
 
-\section{Attempt 2 - Communication via MQTT}
+\section{Attempt B - Communication via MQTT}
 
-After this first attempt i knew how to handle the message and date from the sensors which helped greatly. 
+After this first attempt I knew how to handle the message and date from the sensors which helped greatly. 
 The Communication in my new attempt was handled with a simple MQTT Broker, which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completely free and easy to apply. 
 
 
-\begin{center}
+\begin{figure}[h]
+  \begin{center}
 \includegraphics[width=0.8\textwidth]{images/CommunicationDiagrammMQTT.png}
-\end{center}
+  \end{center}
+  \caption{Communication Diagramm MQTT}
+  \label{fig:CommunicationDiagrammMQTT}
+\end{figure}
+
 MQTT uses a simple publish subscribe protocol which I have already implemented a few times.
 Below you see the whole setup and loop code, which is almost readable thanks to helper functions:
 \begin{lstlisting}
@@ -246,10 +261,9 @@ char* getMessage(){
   return messagebuffer;
 }
 \end{lstlisting}
-As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the mqtt Library could not handle "arduino" Strings and therefore needed char* which are a mess to work with. That is also why a grave error occurred in this function. The lines which are commented out, were my first implementation which work but give wrong data since it does not access to expected array or data.
+As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the "PubSubClient" Library \cite{knollear26:online}, used to comunicate with the MQTT Broker, could not handle "arduino" strings and therefore needed char pointers, which are a quite complicated to work with. That is also why a grave error occurred in this function. The lines which are commented out, were my first implementation which work but give wrong data since it does not access to expected array or data.
 This mistake was unfortunately only discovered when visualising the data, since C++ does not throw any errors when accessing items out of the array, and simply returns the values in the addresses accessed.
-
-Dr. K\"{o}nig showed me protobuf which I will try to implement as well, however protobuff does take some time to implement. Nontheless after some tinkering i finally managed to get a nice JSON message over the MQTT Broker: 
+Nonetheless after some tinkering I finally managed to get a nice JSON message over the MQTT Broker: 
 \begin{lstlisting}
 { 
     "id": "SENSOR-XSZ", 
@@ -258,7 +272,9 @@ Dr. K\"{o}nig showed me protobuf which I will try to implement as well, however 
 }
 \end{lstlisting}
 
-Additionally I enabled all devices to be calibrated remotely. This since when i put these devices on I will need to calibrate them after they are set in position. This is quite a simple task with MQTT since the clients can simply subscribe to a topic, from which they get messages: 
+Protobuf would be a great alternative, which I will try to implement as well. Protobuff does take some time to set up but would simplify the data transfer greatly since bytes could be directly sent and would not need to be concatenated to a JSON.
+
+Additionally I enabled all devices to be calibrated remotely. This since when I put these devices on I will need to calibrate them after they are set in position. This is quite a simple task with MQTT since the clients can simply subscribe to a topic, from which they get messages: 
 
 \begin{lstlisting}
 void callback(char* topic, byte* message, unsigned int length) {
@@ -291,7 +307,7 @@ Furthermore it also achieves the goal of being cheap and affordable. Since we no
 
 This also means that there does not need to be any more logic on the devices itself since everything can be done from a Computer. Maybe some sort of vibration device will be added which however also can be activated via the MQTT Broker. 
 
-The Fact that these sensors now can simply send data without knowing where they are or what exactly they are measuring might open quite a lot of doors. I will get further into that in a later chapter.
+The Fact that these sensors now can simply send data without knowing where they are or what exactly they are measuring might open quite a lot of doors. I will get further into that in the chapter "Prospects".
 
 \subsection{Backdraws Version 2}
 
@@ -311,7 +327,7 @@ The Implementation with MQTT not only simplifies the communication but also redu
 
 As a second prototype a different micro controller was used, which was smaller and worked with a small battery unit. This enabled me to already reduce the size of the sensor module. Any additional function like LED's for demonstration purposes can also simply be added and used in place of a vibration unit.
 
-Currently the hardware all together costs my, even when bought in Switzerland and as a single unit, about 20 CHF. When bought from china, still as single units, the price can be reduced to about 12 CHF. I would estimate that the price could be lowered further, when buying in bulk, to about 5 CHF.
+Currently the hardware all together costs, even when bought in Switzerland and as a single unit, about 20 CHF. When bought from china, still as single units, the price can be reduced to about 12 CHF. I would estimate that the price could be lowered further, when buying in bulk, to about 5 CHF.
 
 
 \input{Chapters/04_Version2/techincal_difficulties.tex}

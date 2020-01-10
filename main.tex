@@ -4,7 +4,8 @@
 \usepackage{listings}
 \begin{document}                              	% Start Document
 \settocdepth{section}														% Set depth of toc
-\pagenumbering{roman}														
+\pagenumbering{roman}	
+
 %---------------------------------------------------------------------------
 
 \input{leader/title}					% Titel der Arbeit aus Datei titel.tex lesen
@@ -37,6 +38,7 @@
 
 \setcounter{page}{1}
 
+
 \cleardoublepage
 %---------------------------------------------------------------------------
 
@@ -50,6 +52,7 @@
 %---------------------------------------------------------------------------
 \pagenumbering{arabic}
 \renewcommand\thefigure{\arabic{figure}}
+
 
 \addcontentsline{toc}{chapter}{Introduction}
 \input{Chapters/01_introduction/introduction.tex}
