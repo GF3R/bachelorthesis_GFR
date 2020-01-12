@@ -2,7 +2,7 @@
 
 The visualisation of static data has a lot of issues, especially when the data is dynamic. Since the collected data would have needed to be compared to a video to really understand what was going on. It was hard comprehend what the effect, smaller movement had, on the collected data.  Therefore, I decided to implement a small web app which will visualise the data in real time. 
 
-This was achieved with a simple C\# MVC website which subscribes to the MQTT broker. Here the switch to MQTT and the extra effort for this switch, was highly beneficial.
+This was achieved with a simple C\# \gls{MVC} website which subscribes to the MQTT broker. Here the switch to MQTT and the extra effort for this switch, was highly beneficial.
 
 The website started small and was simply used to visualise the collected data:
 \begin{figure}[h]
@@ -29,18 +29,17 @@ function getRoll(x, y, z) {
 }
 \end{lstlisting}
 
-With these formula the position of the sensor was really simple to read and visualise. However when working with the literal data which is sent from the sensor there is a lot of jitter, which meant that the data was not very readable or meaningful, therefore i decided to visualise the median of a 10 second measurement, since the refresh rate is not very important. It was also clear that one sensor would not be enough, since its position does not offer enough information about the posture: 
+With these formula the position of the sensor was really simple to read and visualise. However when working with the literal data which is sent from the sensor a lot of jitter is present, which meant that the data was not very readable or meaningful. To reduce this jitter, it was decided decided to visualise the median of a 10 second measurement, since the refresh rate is not very important fort the current use case. It became clear after some testing and discussion, that one sensor would not be enough, since its position does not offer sufficient information about the posture. (see Figure \ref{fig:BackPos})
 
-\begin{figure}[ht]
+\begin{figure}[h]
   \begin{center}
-\includegraphics[width=0.3\textwidth]{images/Backposition.png}
+\includegraphics[width=\textwidth]{images/Backposition.png}
   \end{center}
   \caption{Back position}
   \label{fig:BackPos}
 \end{figure}
 
-Therefore a minimum of two sensor would definitely be needed to make general conclusions from the data. This due to the fact, that posture can change on the lower or the upper back. Which means it is possible that the upper back stays straight however the lower back is buckled or the other way around. 
-The default visualisation was then expanded to three to improve the analysis of the data.  The Idea was to calculate the degrees between each sensor to check whether the user has a bent back. This was later overturned, however I might get back to that idea since it would enable the user to have more flexibility when moving, since it would allow for the whole back to move correctly without triggering a warning.
+Therefore a minimum of two sensor would definitely be needed to make general conclusions from the data. This due to the fact, that posture can change on the lower or the upper back. Which means it is possible that the upper back stays straight however the lower back is buckled or the other way around. Additional sensors would be optimal to get more detailed information about posture and the curvature of the spine. Also the shoulders are not tracked with the current sensor position. Therefore it must be pointed out, that currently it is only possible to determine whether the wearer is keeping his posture or not. Not much further insight can be given with only two sensor. However, this does satisfy the goals of this thesis and offer enough insight to a casual wearer, to help improve posture. Therefore, also due to time restrictions, in-depth analysis of the spine and curvature was not done in this thesis. To improve the overall understanding and visualisation of the data and minimise calculation errors, three sensors were used. The Idea was to calculate the degrees between each sensor to check whether the user has a bent back. This was later overturned, however I might get back to that idea since it would enable the user to have more flexibility when moving, since it would allow for the whole back to move correctly without triggering a warning.
 
 Through the MQTT-Broker the data of three sensors is sent as JSON. In the JSON is the UID of the sensor with which it is identified. Then the data is parsed and passed through a javascript library (plot.ly) \cite{ModernAn18:online} to create the graphs. To simplify the analysis of the data i further also knew the position of each sensor:
 

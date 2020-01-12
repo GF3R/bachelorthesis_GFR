@@ -5,6 +5,7 @@
 \begin{document}                              	% Start Document
 \settocdepth{section}														% Set depth of toc
 \pagenumbering{roman}	
+ 
 
 %---------------------------------------------------------------------------
 
@@ -53,6 +54,9 @@
 \pagenumbering{arabic}
 \renewcommand\thefigure{\arabic{figure}}
 
+\addcontentsline{toc}{chapter}{Acknowledgements}
+\input{Chapters/acknowledgements.tex}
+
 
 \addcontentsline{toc}{chapter}{Introduction}
 \input{Chapters/01_introduction/introduction.tex}
@@ -64,14 +68,18 @@
 \input{Chapters/05_results/results.tex}
 \addcontentsline{toc}{chapter}{Prospects}
 \input{Chapters/06_prospect/prospect.tex}
-\addcontentsline{toc}{chapter}{Conclusion}
-\input{Chapters/conclusions.tex}
+
 
 \cleardoublepage
 \phantomsection 
 \addcontentsline{toc}{chapter}{Declaration of authorship}
 \include{leader/declaration_authorship}
 %---------------------------------------------------------------------------
+% Glossary
+\addcontentsline{toc}{chapter}{Glossary}
+\printglossary[type=\acronymtype]
+ 
+\printglossary
 
 %---------------------------------------------------------------------------
 

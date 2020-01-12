@@ -9,31 +9,31 @@ The interesting part of this project is the simplicity and low-technicality. Or 
 
 As mentioned was the first approach an android App. This was chosen as a first test environment, because the standard android phone offers all necessary actors and sensors: 
 \begin{enumerate}
-    \item Accelerometer - To Detect Acceleration
-    \item Gyroscope - To Detect Orientation
+    \item \gls{Accelerometer} - To Detect Acceleration
+    \item \gls{Gyroscope} - To Detect Orientation
     \item Vibrators
     \item Storage
 \end{enumerate}
 
-This means it was quite simple to check position and pitch, and react when the pitch was to high by vibrating. This is quite simple to achieve and did work as expected.
+This means it was possible to get live data and calculate position and pitch. Additionaly, due to the built in vibrator units, it was possible to vibrate when the pitch was to high. With enough Android knowhow, this implementation was achievable swiftly and did work as expected.
 
-however, the usability was not great and it did not feel very professional. The phone had to be held and placed near the chest to even work. This would mean the first use case, improving the sitting position, was not achievable without a second phone or the compromise of not using your phone while you work, which seems to me, unmanageable. Therefore the android app idea was quickly put aside. Since, for now at least, it does not offer what is desired.
+However, the usability was not great and it did not feel very professional. The phone had to be held and placed near the chest to even work. This would mean the first use case, improving the sitting position, was not achievable without a second phone or the compromise of not using your phone while you work, which seems to me, unmanageable. Therefore the android app idea was quickly put aside. Since, for now at least, it does not offer what is desired.
 
 \newpage
 \section{The IoT Solution}
 
-The next plan was to create a simple IoT solution. Put on some actors some sensors and done. At least that is what i thought would happen. The Device is running on a Microcontroller, an ESP 32, specifically an ESP32 WEMOS Lolin V1.0.0. The very specific version is quite important. I will go further in depth into why, in the \textbf{difficulties}.
+The next plan was to create a simple \acrshort{iot} solution (\gls{IoT}). Put on some actors some sensors and done. At least that is what i thought would happen. The Device is running on a \gls{Microcontroller}, an ESP 32, specifically an ESP32 WEMOS Lolin V1.0.0. The very specific version is quite important. I will go further in depth into why, in the \textbf{difficulties}.
 
-The ESP32 was chosen, since it offers everything you can imagine. It has a built in Bluetooth module, Wifi module and supports nearly all modern Android libraries and components. On top of that the ESP32 is really cheap. It can be bough from Swiss sellers for about 15 CHF and if time does not matter it can be imported via aliexpress.com for as low as 2-5 CHF. Therefore I considered it to be a perfect contestant for this project. 
+The \gls{ESP32} was chosen, since it offers everything you can imagine. It has a built in Bluetooth module, Wifi module and supports nearly all modern Android libraries and components. On top of that the ESP32 is really cheap. It can be bough from Swiss sellers for about 15 CHF and if time does not matter it can be imported via aliexpress.com for as low as 2-5 CHF. Therefore I considered it to be a perfect contestant for this project. 
 
-Additionally to the micro-controller a few more items are needed to complete the project. A Gyroscope, Accelerometer, Vibrators, A Real Time Clock (RTC) and a SD-Card module. The RTC is needed since we want to log the measured values, and to analyse or visualise these logs, a time-stamp is necessary. 
+Additionally to the micro-controller a few more items are needed to complete the project. A Gyroscope, Accelerometer, Vibrators, A Real Time Clock (\acrshort{rtc}) and a \acrshort{sd}-Card (\gls{SD}) module. The \gls{RTC} is needed since we want to log the measured values, and to analyse or visualise these logs, a time-stamp is necessary. 
 
 All modules I have used, are used in so called breakout boards. These make the testing and development easier by offering pin-out and -in to enable swift testing. Without breakout boards the parts would be a lot smaller, however, not suitable for a first prototype since it would complicate the development process.
 
 \subsection{The Gyroscope and Accelerometer}
 
 After some investigating, what modules are available on the market, I have decided to go with the 
-MPU6050 Chip since it is widely used and is documented very well. 
+\gls{MPU6050} Chip since it is widely used and is documented very well. 
 
 \begin{wrapfigure}[16]{l}{0.3\textwidth}
   \begin{center}
@@ -228,7 +228,7 @@ The baseZacc, baseYacc and baseXacc are the values which was are read in the fir
 
 furthermore, there are four vibrators  which vibrate in the direction the "broom is falling", so front, back, left or right. Additionally the data is also recorded into an SD Card with a time-stamp. All these individual parts are soldered together and fitted into a belt which can be worn, which is displayed in the picture on the right.
 
-The power-source still is outside of the belt, in the form of a lipo battery which is simply connected via a micro usb cable.
+The power-source still is outside of the belt, in the form of a \gls{lipo battery} which is simply connected via a micro usb cable.
 
 The data collected has will need to be analysed in-depth. furthermore, it appears that one single sensor does not offer the needed results or precision.
 

@@ -2,7 +2,7 @@
 
 The biggest hurdle, was and still is identifying and correctly analysing the data. I have had several different approaches on how to interpret and visualise the data. During my first attempt (Attempt A) i tried to visualised the data in two ways, with Python and Power BI.
 
-Firstly I transformed the data into a CSV which is a commonly used format viable for many different applications
+Firstly I transformed the data into a \acrshort{csv} (\gls{CSV}) which is a commonly used format viable for many different applications
 
 According to the datasheet of the MPU6050 the collected data is "g-force". The accelerometer measure in mg and the gyroscope in \degree/s. 
 
@@ -18,7 +18,7 @@ The entire documentation can be found online \cite{MPU6000D59:online}.
 
 \subsection{Visualising with Python}
 
-I tried to visualise the data using python since it was recommended on a few forums and seamed to be feasible for this task. It actually did work quite well and I have achieved within 2 Days with Python. I have never worked with python before and was happy that I managed to use and apply it within days. 
+I tried to visualise the data using \gls{Python} since it was recommended on a few forums and seamed to be feasible for this task. It actually did work quite well and I have achieved within 2 Days with Python. I have never worked with python before and was happy that I managed to use and apply it within days. 
 
 \begin{figure}[h]
 \begin{center}
@@ -43,7 +43,7 @@ ax.scatter3D(XSZAcc[:,0],XSZAcc[:,1],XSZAcc[:,2], c=XSZAcc[:,2], cmap='Greens')
 
 \subsection{Visualising with Power BI}
 
-Power BI is a very powerfull tool which I was already used to, since we used it at work to visualise project data and quality gates. Therefore it was much easier for me to visualise the data.
+\gls{Power BI} is a very powerfull tool which I was already used to, since we used it at work to visualise project data and quality gates. Therefore it was much easier for me to visualise the data.
 
 \begin{figure}[h]
 \begin{center}

@@ -12,7 +12,7 @@ The communication was firstly achieved via WIFI since I know the protocol and ca
 An issue with wireless communication is the synchronisation of the data flow. To simplify the process and due to lack of know how and time to achieve a correct synchronisation I will ignore it, while knowing the data might be time shifted. 
 This might be an issue when visualising and analysing the data, but will be tackled then.
 
-Furthermore for the communication via WIFI a simple "Client Server" protocol was used which has already been widely implement in ESP32.
+Furthermore for the communication via WIFI a simple "Client Server" protocol was used which has already been implement in ESP32 Micro-controllers.\cite{arduinoi4:online} \cite{ESP32Ser71:online}
 
 Server Client Request: 
 \begin{lstlisting}
@@ -130,7 +130,7 @@ After working with it for a while I tried to find a much simpler way, which is c
 \section{Attempt B - Communication via MQTT}
 
 After this first attempt I knew how to handle the message and date from the sensors which helped greatly. 
-The Communication in my new attempt was handled with a simple MQTT Broker, which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completely free and easy to apply. 
+The Communication in my new attempt was handled with a simple \acrshort{mqtt} Broker (\gls{MQTT}), which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completely free and easy to apply. 
 
 
 \begin{figure}[h]
@@ -261,9 +261,9 @@ char* getMessage(){
   return messagebuffer;
 }
 \end{lstlisting}
-As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the "PubSubClient" Library \cite{knollear26:online}, used to comunicate with the MQTT Broker, could not handle "arduino" strings and therefore needed char pointers, which are a quite complicated to work with. That is also why a grave error occurred in this function. The lines which are commented out, were my first implementation which work but give wrong data since it does not access to expected array or data.
+As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the "PubSubClient" Library \cite{knollear26:online}, used to communicate with the MQTT Broker, could not handle "arduino" strings and therefore needed char pointers, which are a quite complicated to work with. That is also why a grave error occurred in this function. The lines which are commented out, were my first implementation which work but give wrong data since it does not access to expected array or data.
 This mistake was unfortunately only discovered when visualising the data, since C++ does not throw any errors when accessing items out of the array, and simply returns the values in the addresses accessed.
-Nonetheless after some tinkering I finally managed to get a nice JSON message over the MQTT Broker: 
+Nonetheless after some tinkering I finally managed to get a nice \acrshort{json} message (\gls{JSON}) over the MQTT Broker: 
 \begin{lstlisting}
 { 
     "id": "SENSOR-XSZ", 
@@ -272,7 +272,7 @@ Nonetheless after some tinkering I finally managed to get a nice JSON message ov
 }
 \end{lstlisting}
 
-Protobuf would be a great alternative, which I will try to implement as well. Protobuff does take some time to set up but would simplify the data transfer greatly since bytes could be directly sent and would not need to be concatenated to a JSON.
+\acrshort{protobuff} (\gls{Protobuf}) would be a great alternative, which I will try to implement as well. Protobuf does take some time to set up but would simplify the data transfer greatly since bytes could be directly sent and would not need to be concatenated to a JSON.
 
 Additionally I enabled all devices to be calibrated remotely. This since when I put these devices on I will need to calibrate them after they are set in position. This is quite a simple task with MQTT since the clients can simply subscribe to a topic, from which they get messages: 
 
