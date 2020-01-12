@@ -104,7 +104,7 @@ During the development and testing of this concept, it turned out that the clien
 The Server needed a few modules for it to work, as show below:
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
 \includegraphics[width=\linewidth]{images/CommunicationDiagrammExplenation.png}
   \end{center}
@@ -116,7 +116,7 @@ This does not look like much but both of these elements, the RTC and the SD Card
 
 Beside these technical issues the data transfer during the development phase, where Bluetooth or hotspot was available was quite awkward since the device need to be stopped and the data needed to be analysed in a separate step. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
 \includegraphics[width=0.5\textwidth]{images/CommunicationDiagrammLocal.png}
   \end{center}
@@ -133,7 +133,7 @@ After this first attempt I knew how to handle the message and date from the sens
 The Communication in my new attempt was handled with a simple \acrshort{mqtt} Broker (\gls{MQTT}), which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completely free and easy to apply. 
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
 \includegraphics[width=0.8\textwidth]{images/CommunicationDiagrammMQTT.png}
   \end{center}
@@ -170,14 +170,17 @@ void setup() {
 
 void loop () {
   client.loop();
-  currentMillis = millis();  //get the current "time" (actually the number of milliseconds since the program started)
-  if (currentMillis - startMillis >= period)  //test whether the period has elapsed
+  currentMillis = millis();  
+  //get the number of milliseconds since the program started
+  if (currentMillis - startMillis >= period)  
+  //test whether the period has elapsed
   {
     Serial.println("trying to send");
     char * message = getMessage();
     publish(message);
     Serial.println(message);
-    startMillis = currentMillis;  //IMPORTANT to save the start time of the current LED state.
+    startMillis = currentMillis;  
+    //IMPORTANT to save the start time of the current LED state.
   }
  getData();
  }
@@ -186,19 +189,23 @@ void loop () {
 This loop collected the data into an average in "getData()" function
 \begin{lstlisting}
 void getData(){
-  if(readByte(MPU6050_ADDRESS, INT_STATUS) & 0x01) {  // check if data ready interrupt
+  if(readByte(MPU6050_ADDRESS, INT_STATUS) & 0x01) { 
+  // check if data ready interrupt
     readAccelData(accelCount);  // Read the x/y/z adc values
     getAres();
-    ax = (float)accelCount[0]*aRes - accelBias[0];  // get actual g value, this depends on scale being set
+    ax = (float)accelCount[0]*aRes - accelBias[0]; 
+    // get actual g value, this depends on scale being set
     ay = (float)accelCount[1]*aRes - accelBias[1];   
     az = (float)accelCount[2]*aRes - accelBias[2];  
     readGyroData(gyroCount);  // Read the x/y/z adc values
     getGres();
-    gx = (float)gyroCount[0]*gRes - gyroBias[0];  // get actual gyro value, this depends on scale being set
+    gx = (float)gyroCount[0]*gRes - gyroBias[0];  
+    // get actual gyro value, this depends on scale being set
     gy = (float)gyroCount[1]*gRes - gyroBias[1];  
     gz = (float)gyroCount[2]*gRes - gyroBias[2];  
     tempCount = readTempData();  // Read the x/y/z adc values
-    temperature = ((float) tempCount) / 340. + 36.53; // Temperature in degrees Centigrade
+    temperature = ((float) tempCount) / 340. + 36.53; 
+    // Temperature in degrees Centigrade
  
     accelVal[0] = ax;
     accelVal[1] = ay;
