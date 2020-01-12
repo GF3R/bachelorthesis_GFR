@@ -14,7 +14,7 @@ jobs:
         # The root LaTeX file to be compiled
         root_file: main.tex
         # LaTeX engine to be used
-        compiler: pdftex# optional, default is latexmk          
+        compiler: latexmk # optional, default is latexmk          
     - name: Move main.pdf
       run: mkdir build; mv main.pdf build/;
     - name: GitHub Pages Deploy
