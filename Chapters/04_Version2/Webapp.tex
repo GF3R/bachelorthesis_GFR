@@ -13,7 +13,7 @@ The website started small and was simply used to visualise the collected data:
   \label{fig:SimpleWebVisualisation}
 \end{figure}
 
-Thanks to this visualisation I was quickly able to understand the data and add additional visualisations and make first conclusions which data was necessary for an in depth analysis. It became clear, that the data needed to be "transferred" into a much more readable format, like pitch, roll and yaw.
+Thanks to this visualisation I was quickly able to understand the data and add additional visualisations and make first conclusions which data was necessary for an in depth analysis. It became clear, that the data needed to be "transferred" into a much more readable format, like pitch, roll and yaw. 
 The conversion was quite simple and only needs the acceleremoter data:
 
 \begin{lstlisting}
@@ -28,8 +28,12 @@ function getRoll(x, y, z) {
     }
 }
 \end{lstlisting}
+\cite{Beginner65:online}
 
-With these formula the position of the sensor was really simple to read and visualise. However when working with the literal data which is sent from the sensor a lot of jitter is present, which meant that the data was not very readable or meaningful. To reduce this jitter, it was decided decided to visualise the median of a 10 second measurement, since the refresh rate is not very important fort the current use case. It became clear after some testing and discussion, that one sensor would not be enough, since its position does not offer sufficient information about the posture. (see Figure \ref{fig:BackPos})
+
+With this formula the position of the sensor was readable and elementary to visualise. This function, even if simple, is great for the current sensors and the use case, it uses only the current measured values for calculations. Other formulas for positional analysis, like Quaternions \cite{MathsQua11}, are much more complex and use the sum of the measured data. This can cause drift, by small errors adding up. Which, especially when working with "amateur" sensors and long term measurements, can be a real problem.
+
+When this formula is applied with the literal and live data which is sent from the sensor, still a lot of jitter is present, which meant that the data was not very readable or meaningful. To reduce this jitter, it was decided decided to visualise the median of a 10 second measurement, since the refresh rate is not very important fort the current use case. It became clear after some testing and discussion, that one sensor would not be enough, since its position does not offer sufficient information about the posture. (see Figure \ref{fig:BackPos})
 
 \begin{figure}[h]
   \begin{center}

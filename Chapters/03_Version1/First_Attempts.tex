@@ -59,17 +59,20 @@ The Code for the calculation and reading of values is quite complex and really l
 
 To communicate with the MPU6050 and the RTC, SD Card module the wire library is necessary. With this library the communication and data exchange over only two cables (SDA Serial Data Line, SCL Serial Clock Lin) is made possible. Both modules communicate through these cables. These are located at port 21 and port 22 on the ESP32. The communication protocol is quite simple, and as soon as more than one device is communicating, it reduces the complexity of communication, and also soldering. Here a quick code example of the communication with the MPU6050:
 \begin{lstlisting}
-  void readBytes(uint8_t address, uint8_t subAddress, uint8_t count, uint8_t * dest)
+void readBytes(uint8_t address, uint8_t subAddress, uint8_t count, uint8_t * dest)
 {  
 	Wire.beginTransmission(address);   
 	Wire.write(subAddress);            
 	Wire.endTransmission(false);       
 	uint8_t i = 0;
-        Wire.requestFrom(address, count);  // Read bytes from slave register address 
+        Wire.requestFrom(address, count);  
+        // Read bytes from slave register address 
 	while (Wire.available()) {
-        dest[i++] = Wire.read(); }         // Put read results in the Rx buffer
+        dest[i++] = Wire.read(); 
+    }         // Put read results in the Rx buffer
 }
 \end{lstlisting}
+\cite{MPU9250M94:online}
 
 The communication is very well documented \cite{ArduinoW76:online} and worked on the first try. However, a difficulty definitely is and will also be, the addresses. The address of these parts is given by their manufacturer and is the same for every part. 
 
