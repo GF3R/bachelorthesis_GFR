@@ -3,11 +3,11 @@
 \renewcommand{\thesection}{\arabic{section}}
 \setcounter{section}{0}
 
-The interesting part of this project is the simplicity and low-technicality. Or At least i thought so.
+I thought that the interesting part of this project, is the simplicity and low-technicality. However the implementation turned out to be much more complex than expected. This attempt unfortunately was not accompanied with the expected success.
 
 \section{The Android App}
 
-As mentioned was the first approach an android App. This was chosen as a first test environment, because the standard android phone offers all necessary actors and sensors: 
+The very first approach to the posture "problem" was an android App. The standard android phone offers all necessary actors and sensors and is therefore a great test environment: 
 \begin{enumerate}
     \item \gls{Accelerometer} - To Detect Acceleration
     \item \gls{Gyroscope} - To Detect Orientation
@@ -15,24 +15,26 @@ As mentioned was the first approach an android App. This was chosen as a first t
     \item Storage
 \end{enumerate}
 
-This means it was possible to get live data and calculate position and pitch. Additionaly, due to the built in vibrator units, it was possible to vibrate when the pitch was to high. With enough Android knowhow, this implementation was achievable swiftly and did work as expected.
+This means it was possible to get live data and calculate position and pitch in real time. Thanks to the built in vibration units, it was also possible to vibrate when a threshold was reached. With enough Android development know-how, this implementation is achievable swiftly and did work as expected.
 
-However, the usability was not great and it did not feel very professional. The phone had to be held and placed near the chest to even work. This would mean the first use case, improving the sitting position, was not achievable without a second phone or the compromise of not using your phone while you work, which seems to me, unmanageable. Therefore the android app idea was quickly put aside. Since, for now at least, it does not offer what is desired.
+The usability was not great and it did not feel very professional. The phone had to be held and placed near the chest or back to work. This would mean the first use case, improving the sitting position, was not achievable without holding or attaching the phone to the user and not using your phone while at work. Therefore the android app idea was quickly put aside. Since, for now at least, it does not offer what is desired.
 
 \newpage
 \section{The IoT Solution}
 
-The next plan was to create a simple \acrshort{iot} solution (\gls{IoT}). Put on some actors some sensors and done. At least that is what i thought would happen. The Device is running on a \gls{Microcontroller}, an ESP 32, specifically an ESP32 WEMOS Lolin V1.0.0. The very specific version is quite important. I will go further in depth into why, in the \textbf{difficulties}.
+The next plan was to create a simple \acrshort{iot} solution (\gls{IoT}).Which I thought could be achieved by combining actors, sensors  and a bit of code. However it was not as easy as expected, since the sensors and positional data is rather complex. 
 
-The \gls{ESP32} was chosen, since it offers everything you can imagine. It has a built in Bluetooth module, Wifi module and supports nearly all modern Android libraries and components. On top of that the ESP32 is really cheap. It can be bough from Swiss sellers for about 15 CHF and if time does not matter it can be imported via aliexpress.com for as low as 2-5 CHF. Therefore I considered it to be a perfect contestant for this project. 
+The Code is running on a \gls{Microcontroller}, an ESP 32, specifically an ESP32 WEMOS Lolin V1.0.0. The very specific version is quite important. I will go further in depth into why, in the \textbf{difficulties}.
 
-Additionally to the micro-controller a few more items are needed to complete the project. A Gyroscope, Accelerometer, Vibrators, A Real Time Clock (\acrshort{rtc}) and a \acrshort{sd}-Card (\gls{SD}) module. The \gls{RTC} is needed since we want to log the measured values, and to analyse or visualise these logs, a time-stamp is necessary. 
+The \gls{ESP32} was chosen, since it offers everything you can imagine. It has a built in Bluetooth module, Wifi module and supports nearly all modern Android libraries and components. On top of that the ESP32 is cheap. It can be bought from Swiss sellers for about 10-15 CHF. It can also be imported via aliexpress.com for as low as 2-5 CH. The delivery time however, can take up to 2 months. Therefore, I considered it to be a perfect contestant for this project. 
+
+Additionally to the microcontroller a few more items are needed to fullfill the needed requirements. A Gyroscope, an Accelerometer, Vibrators, A Real Time Clock (\acrshort{rtc}) and a \acrshort{sd}-Card (\gls{SD}) module. The \gls{RTC} is needed since we want to log the measured values, and to analyse or visualise these logs, a time-stamp is necessary. 
 
 All modules I have used, are used in so called breakout boards. These make the testing and development easier by offering pin-out and -in to enable swift testing. Without breakout boards the parts would be a lot smaller, however, not suitable for a first prototype since it would complicate the development process.
 
 \subsection{The Gyroscope and Accelerometer}
 
-After some investigating, what modules are available on the market, I have decided to go with the 
+After investigating, which modules are available on the market, I have decided to use the 
 \gls{MPU6050} Chip since it is widely used and is documented very well. 
 
 \begin{wrapfigure}[16]{l}{0.3\textwidth}
@@ -46,7 +48,7 @@ After some investigating, what modules are available on the market, I have decid
 The MPU6050 communicates via the \textbf{Wire library} and has a built in thermometer, accelerometer and gyroscope. The module is also really tiny even if it is a breakout board.
 Without the breakout board this sensor would be reduced to the black square since in the picture  (\ref{fig:MPU6050}).
 
-The MPU6050 is documented very precisely which was a great help during development and made it quite easy to get the values. This Chip would offer a possibility to perform some calculation directly on the Chip, however, this part of the MPU6050 is a bit obfuscated and would increase the complexity vastly without offering real benefits. This however, might be something, which will be considered in further development steps of this project.
+The MPU6050 is documented very precisely which was a great help during development and made it quite easy to get the correct values. This Chip would also offer the possibility to perform some calculations directly on the Chip. Unfortunately, this part of the MPU6050 is very obfuscated. It would increase the complexity vastly without offering real benefits. This however, might be something, which will be considered in further development steps of this project.
 
 The MPU has a very high complexity and it was quite a challenge to understand all the data, that the device provides. Especially reading the data showed to be much harder than expected. However, after some research and a lot of testing, it turned out to be much easier than firstly expected, since I was able to read the gravity which affects the accelerometer.
 Currently only the values of the accelerometer are used to determine the position and sense the direction in which the user is leaning. This might be a bit to simple for the ergonomic use case, however, it is a good starting point and no technical modification are needed to get additional values.
@@ -233,11 +235,11 @@ furthermore, there are four vibrators  which vibrate in the direction the "broom
 
 The power-source still is outside of the belt, in the form of a \gls{lipo battery} which is simply connected via a micro usb cable.
 
-The data collected has will need to be analysed in-depth. furthermore, it appears that one single sensor does not offer the needed results or precision.
+The data collected has will need to be analysed in-depth. Furthermore, it appears that one single sensor does not offer the needed results or precision to detect posture. The current posture model lacks a lot of information and does not have the quality to give useful information. 
 
 \section{Learnings}
 
-After my first attempts i quickly realized, that connecting all the sensors via cable limited me drastically due to the restrcitons of the Wire.h library. With the current configuration some sort of multiplexer, or custom created accelerometers and gyroscopes would be needed. Since custom parts definitely are not an option (yet) and multiplexers add unnecessary complexity to the project, I have been looking for another solution. The solution should enable me to scale up the number sensors. 
+After this first attempts i quickly realised, that connecting all the sensors via cable limited me drastically due to the restrictions of the Wire.h library and the I2C protocol. Due to the addressing issues with the current configuration, some sort of multiplexer, or custom created accelerometers and gyroscopes is needed. Custom parts would currently be way to complicated and multiplexers add unnecessary complexity to the project, I have been looking for another solution. The solution should enable me to scale up the number sensors without back-draws.
 
-furthermore, the current cable management and hardware complexity is higher than desired and will deffinetly need to be simplified.
+Furthermore, the current cable management and hardware complexity will need to be simplified. The current build is much higher than desired and will need to be simplified. Especially since it should be reproductionable.
 
