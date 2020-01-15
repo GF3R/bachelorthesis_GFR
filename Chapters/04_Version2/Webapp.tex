@@ -13,9 +13,8 @@ The website started small and was simply used to visualise the collected data:
   \label{fig:SimpleWebVisualisation}
 \end{figure}
 
-Thanks to this visualisation I was quickly able to understand the data and add additional visualisations and make first conclusions which data was necessary for an in depth analysis. It became clear, that the data needed to be "transferred" into a much more readable format, like pitch, roll and yaw. 
-The conversion was quite simple and only needs the acceleremoter data:
-
+Thanks to this visualisation I was quickly able to understand the data and add additional visualisations and make first conclusions which data was necessary for an in depth analysis. It became clear, that the data needed to be "transferred" into a much more readable format, like pitch, roll and yaw. The conversion was quite simple and needs only the acceleremoter data:
+\vspace{-5pt}
 \begin{lstlisting}
 function getRoll(x, y, z) {
     pitch = 180 * Math.atan(x / Math.sqrt(y * y + z * z)) / Math.PI * 4;
@@ -31,7 +30,7 @@ function getRoll(x, y, z) {
 \cite{Beginner65:online}
 
 
-With this formula the position of the sensors was readable and elementary to visualise. This function, even if simple, is great for the current sensors and the use case. It uses only the current measured values for calculations. Other formulas for positional analysis, like Quaternions \cite{MathsQua11}, are much more complex and use the sum of the measured data. This can cause drift, by small errors adding up. Which, especially when working with "amateur" sensors and long term measurements, can be a real problem.
+With this formula the position of the sensors was readable and elementary to visualise. This function is great for the implemented sensors and the current use case. It uses only the current measured values for calculations. Other formulas for positional analysis, like Quaternions \cite{MathsQua11}, are much more complex and use the sum of the measured data. This can cause drift, by small errors adding up. Which, especially when working with "amateur" sensors and long term measurements, can be a real problem.
 
 When this formula is applied with the literal and live data which is sent from the sensor, still a lot of jitter is present. Due to this the data was not very readable or meaningful. To reduce this jitter, I decided decided to visualise the median of a 10 second measurement. Since the refresh rate is not very important for the current use case, this did not have any disadvantages. It became clear after some testing and discussion, that one sensor would not be enough, since its position does not offer sufficient information about the posture. (see Figure \ref{fig:BackPos})
 
@@ -43,7 +42,7 @@ When this formula is applied with the literal and live data which is sent from t
   \label{fig:BackPos}
 \end{figure}
 
-Therefore a minimum of two sensor would definitely be needed to make general conclusions from the data. This due to the fact, that posture can change on the lower or the upper back, as visualised in Figure \ref{fig:BackPos}). Which means it is possible that the upper back stays straight however the lower back is buckled or the other way around. Additional sensors would be optimal to get more detailed information about posture and the curvature of the spine. Also the shoulders are not tracked with the current sensor position. Therefore it must be pointed out, that currently it is only possible to determine the positions of the lower and upper back. Not much further insight can be given with only two sensor. However, I consider this to satisfy the goals of this thesis. It offers enough insight to a casual wearer and has the potential to help improve posture. Therefore, also due to time restrictions and missing know-how, an in-depth analysis of the spine and curvature was not done in this thesis. To improve the overall understanding and visualisation of the data, three sensors were used during testing. The Idea was to calculate the degrees between each sensor to check whether the user has a bent back. This was later overturned since the curvature of the back does not give any insight in healthy posture \cite{SitUpSt77:online}. However, I might get back to that idea since it would enable the user to have more flexibility when moving. It might allow to increase the threshold, when the entire back is moved correctly.
+Therefore, a minimum of two sensor would definitely be needed to make general conclusions from the data. This due to the fact, that posture can change on the lower or the upper back, as visualised in Figure \ref{fig:BackPos}). Which means it is possible that the upper back stays straight and the lower back is buckled or the other way around. Additional sensors would be optimal to get more detailed information about posture and the curvature of the spine. Also the shoulders are not tracked with the current sensor position. Therefore, it must be pointed out, that currently it is only possible to determine the positions of the lower and upper back. Not much further insight can be given with only two sensor. However, I consider this to satisfy the goals of this thesis. It offers enough insight to a casual wearer and has the potential to help improve posture. Therefore, also due to time restrictions and missing know-how, an in-depth analysis of the spine and curvature was not done in this thesis. To improve the overall understanding and visualisation of the data, three sensors were used during testing. The Idea was to calculate the degrees between each sensor to check whether the user has a bent back. This was later overturned since the curvature of the back does not give any insight in healthy posture \cite{SitUpSt77:online}. However, I might get back to that idea since it would enable the user to have more flexibility when moving. It might allow to increase the threshold, when the entire back is moved correctly.
 
 Through the MQTT-Broker the data of three sensors is sent as JSON. In the JSON is the UID of the sensor with which it is identified. Then the data is parsed and passed through a javascript library (plot.ly) \cite{ModernAn18:online} to create the graphs. To simplify the analysis of the data I further also knew the position of each sensor:
 
@@ -55,20 +54,20 @@ Through the MQTT-Broker the data of three sensors is sent as JSON. In the JSON i
   \label{fig:SensorPos}
 \end{figure}
 
-After some research, testing and discussion with a physiotherapist, we realised, that the approach of trying to set a general goal for all users was not correct, in many ways. Different studies found that posture is a very individual thing and cannot be set globally \cite{SitUpSt77:online} therefore we decided to implement functionality so that each user can set his/her own individual goals. I will get further into these decision in the chapter "Results".
+After some research, testing and discussion with a physiotherapist, we realised, that the approach of trying to set a general goal for all users was not correct, in many ways. Different studies found that posture is a very individual thing and cannot be set globally \cite{SitUpSt77:online} therefore, we decided to implement functionality so that each user can set his/her own individual goals. I will get further into these decision in the chapter "Results".
 
 \subsection{Functionality}
 
 Thanks to distributed setup and the data transfer using a MQTT broker, the web app could not only be used to visualise the data. Additional functionality was added which uses the live data to help the user improve his/her posture. This was achieved with two, lets call them, modes. 
 
 The first mode is the "Goal" mode, where the user can set a goal posture which he would like to achieve and keep. The user clicks to button "calibrate" and then the desired posture needs to be held for at least 10 seconds. 
-Now every sensor has a calibrated optimal value. Each deviation of this optimal value is visualised, and when a threshold is reached a warning is triggered to the user. In the beginning of this project the warning was only visual, however a tactical feedback from the sensor itself was implemented later on.
+Now every sensor has a calibrated optimal value. Each deviation of this optimal value is visualised, and when a threshold is reached a warning is triggered to the user. In the beginning of this project the warning was only visual. However a tactical feedback from the sensor itself was implemented later on.
 
 These modes are visualised as below. In the circle in figure \ref{fig:TargetPosition} you see a red line and a green line. Here the avoid mode is visualised where the red line is the position the user would like to avoid and the green line is his current position.
 
 \begin{figure}[ht]
   \begin{center}
-\includegraphics[width=\textwidth]{images/WebAppCircle.png}
+\includegraphics[width=0.7\textwidth]{images/WebAppCircle.png}
   \end{center}
   \caption{Target position}
   \label{fig:TargetPosition}

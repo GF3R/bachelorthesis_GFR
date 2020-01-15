@@ -2,11 +2,11 @@
 \label{chap:Results}
 \setcounter{section}{0}
 
-During my thesis I learnt a lot about posture and sensors and achieved a great base for further projects and continuing this journey. I definitely did not create a finished product, however, this was never the goal of this projects. Nonetheless I achieved a view goals which I have listed below.
+During my thesis I learnt a lot about posture and sensors and achieved a great base for further projects and continuing this journey. A finished product was not yet created, however, this was never a goal of this thesis. Nonetheless, I achieved a view goals which I have listed below.
 
 \section{Quick Summary}
 
-As a quick summary of all goals and learnings, it can be said, that a minimum of two Sensors are needed. One must be positioned on the lower and one on the upper back (As visualised in Figure \ref{fig:BackPos}). Thanks to this positioning any change of posture should be detected from at least on sensor. Additional sensors will help improving precision however, are not necessary. The right posture is defined by the user itself and not predefined by the software. A "global" correct position could be set using this setup, however, was not found useful or recommendable. \cite{SitUpSt77:online} Additionally, the user can also set posture he would like to avoid.
+As a quick summary of all goals and learnings, it can be said, that a minimum of two Sensors are needed. One must be positioned on the lower and one on the upper back (As visualised in Figure \ref{fig:BackPos}). Thanks to this positioning any change of posture should be detected from at least on sensor. Additional sensors will help improving precision however, are not necessary. The desired posture is defined by the user itself and not predefined by the software. A "global" correct position could be set using this setup, however, was not found useful or recommendable. \cite{SitUpSt77:online} Additionally, the user can also set posture he would like to avoid.
 
 When the set posture goal is not met, the user gets a vibration feedback from the sensor and a visual feedback from the software. The analysis of these value is done with the median of a 10 second measurement, since a quicker refresh rate does not offer any real benefit and it reduces useless vibrations due to hectic movement.
 
@@ -22,9 +22,9 @@ In the evolution of this project, I simplified the data transfer and created a f
   \label{fig:SensorWorkflow}
 \end{figure}
 
-With the flow displayed above, in figure \ref{fig:SensorWorkflow}, the sensors can all have the same logic and only need  a unique id to be identified and no further setup. It needs to be noted, that the register service was not fully implemented for this thesis, however, it was mocked. This since it does not add any value to the thesis or the goals of this thesis.
+With the flow displayed above, in figure \ref{fig:SensorWorkflow}, the sensors can all have the same logic and only need an unique id to be identified and no further setup. It needs to be noted, that the register service was not fully implemented for this thesis, however, it was mocked. This since it does not add any value to the thesis or the goals of this thesis.
 
-Thanks to these adjustments and improvements during this project, live data visualisation was achieved. This is on one hand a cool feature however, it also simplifies the analysis and understanding of the collected data vastly. It helped me really understand the data and transfer it to a simple posture model. Which then enabled me to visualise the positioning of the sensors and the posture. Additionally, thanks to my better understanding of the sensor data and collected data, how it can be used to model posture and my experience gained through the first versions, I know how a single self contained sensor pack could be implemented. This would be easier to user however, much more restricted. 
+Thanks to these adjustments and improvements during this project, live data visualisation was achieved. This is on one very convenient feature, since it simplifies the analysis and understanding of the collected data vastly. It helped me really understand the data and transfer it to a simple posture model. Which then enabled me to visualise the positioning of the sensors and the posture. Additionally, thanks to my better understanding of the sensor data and collected data, how it can be used to model posture and my experience gained through the first versions, I know how a single self contained sensor pack could be implemented. This would be easier to user however, much more restricted. 
 
 Also due to the abstraction of logic, it became much easier working with the data and I think it also improved the re-usability, since logic can be implemented in any language desired and is not restricted to c++.
 
@@ -49,34 +49,34 @@ The user might not know what a good posture is and train a wrong posture or be a
 All the code created for this project will be released on my git repository soon. An introduction and explanation will be available as well, including a list of parts needed to build the same devices. The code and all the documentation will be available as soon, as the code has reached a standard and cleanliness I can get behind.
 
 The source code will be licensed under the "GNU General Public License v3.0" \cite{TheGNUGe7:online} \cite{GNUGener3:online}. This enables the source code to stay open source and still be used and distributed. As described here: "Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights." \cite{GNUGener97:online}
-Other licenses, like the MIT license, would enable users to use the code however keep their changes hidden. Since this projects goal is to improve and stay open source, the availability of the source code is crucial. \cite{TheMITLi73:online}
+Other licenses, like the MIT license, would enable users to use the code however, keep their changes hidden. Since this projects goal is to improve and stay open source, the availability of the source code is crucial. \cite{TheMITLi73:online}
 
 \section{Open Goals}
 
-From my goal of creating a simple affordable solution to improve posture, a lot has been achieved. Nonetheless I did not create the type of solution I first had in mind. I would not consider this a problem, since the current solution is much more flexible. However, my first goal, which I tried to achieve in the first version, was a single contained unit which achieves posture improvements. This would be possible with the know-how I have now and will also be kept as a long term goal. however, I feel that much more can be achieved with the distributed network I have implemented currently. 
+From my goal of creating a simple affordable solution to improve posture, a lot has been achieved. Nonetheless, I did not create the type of solution I first had in mind. I would not consider this a problem, since the current solution is much more flexible. However, my first goal, which I tried to achieve in the first version, was a single contained unit which achieves posture improvements. This would be possible with the know-how I have now and will also be kept as a long term goal. however, I feel that much more can be achieved with the distributed network I have implemented currently. 
 
-Currently this sensor network is a simple proof of concept and I will definitely need to implemented some things I have mocked to create a usable and user friendly product.  The Register service would need to be implmented and also the web app needs a lot more work. It is currently not very user friendly and only configured to work with my 3 sensors. 
+Currently this sensor network is a simple proof of concept and I will definitely need to implemented some things I have mocked to create a usable and user friendly product. The Register service would need to be implemented and also the web app needs a lot more work. It is currently not very user friendly and only configured to work with my 3 sensors. 
 
 Furthermore, when the register service is available the sensors need more work, to enable a complete self provisioning, since currently the network connection is hard coded. This is not very interesting or hard since it has been implemented multiple times (https://www.arduino.cc/en/Reference/WiFiNINABeginProvision), therefore I left it out. 
 
-Security, of the data transfer and storage, also is an issue that was only thought of but not implemented. The MQTT Broker is secured by credentials however, these are hard-coded and would currently be the same every user.
+Security, of the data transfer and storage, also is an issue that was only thought of but not implemented. The MQTT broker is secured by credentials however, these are hard-coded and would currently be the same every user.
 
 Lastly the size of the sensor packets is far from optimal and could be drastically reduced by creating a single plate with all logic withing. This will not be a goal that I will tackles soon, since this would be the last step of creating such a "product".
 
 
 \section{Learnings}
 
-Firstly I understood how the MPU6050 sensor works with the wire library, learned much more about Arduino coding and the communication with other sensors and actors. In detail i learned applying and using the I2C standart and what restrictions it has.
+Firstly, I understood how the MPU6050 sensor works with the wire library, learned much more about Arduino coding and the communication with other sensors and actors. In detail I learned applying and using the I2C standard and what restrictions it has.
 Furthermore, I have learned what to be aware of when working with micro-controllers, how to setup a simple client server network with minimal resources and what restrictions micro-controllers have. These are all necessary to create the implemented sensor module. 
 To position the sensor pack I had to test multiple positioning and discuss with a physiotherapist what a useful position would be. According to my understanding the current optimal position would be directly on the spine, and at least two sensors, one on the upper and one on the lower back. Every additional sensor improves the precision of the posture model. 
 
-Additionally, the learning will be applicable on the first version of the project. As mentioned two sensors are necessary for a useful analysis of posture, nonetheless with the current know-how I know that some measurements are still possible with a single sensor unit. it will need to be analysed with a long-term test, how much information is lost when using a single sensor and whether the lost information is critical for a daily wearer.
+Additionally, the learning will be applicable on the first version of the project. As mentioned two sensors are necessary for a useful analysis of posture. Nonetheless, with the current know-how, I know that some measurements are still possible with a single sensor unit. Long-term testing and further analysis will be needed, to determine how much information is lost when using a single sensor. Furthermore, it must be ensured that the lost information is not critical for a daily wearer.
 
 To understand the positioning I also had to understand what posture is. This was only possible through research and unfortunately this know how is still very limited.
 
 \section{Project Management}
 
-In the beginning of the Project a lot of goals were defined. These goals were tagged as necessary or optional. however, the goals changed greatly during the thesis, since new ideas emerged. Non-theless the primary necessary goals, stayed the same and are defined as follows: 
+In the beginning of the Project a lot of goals were defined. These goals were tagged as necessary or optional. however, the goals changed greatly during the thesis, since new ideas emerged. Nonetheless the primary necessary goals, stayed the same and are defined as follows: 
 \renewcommand{\thetable}{\arabic{table}}
 \begin{center}
 \begin{table}[h!]
@@ -112,4 +112,4 @@ In the beginning of the Project a lot of goals were defined. These goals were ta
 
 \subsection{Technical implementation later than expected}
 
-Originally it was planned to have everything technical, software and hardware, done in the beginning of December. however, due to the MQTT data transfer implementation and the visualisation of the data with a web app a lot of the work got done later than expected. however, this was manageable since a time buffer was planned in the beginning. Three weeks of holidays in December were planned in the beginning of the project to ensure a certain and non-hectical finish of the implementation. As visible in the table, this three weeks were used and were definitely necessary. 
+Originally it was planned to have everything technical, software and hardware, done in the beginning of December. however, due to the MQTT data transfer implementation and the visualisation of the data with a web app a lot of the work got done later than expected. however, this was manageable since a time buffer was planned in the beginning. Three weeks of holidays in December were planned in the beginning of the project to ensure a certain and calm finish of the implementation. As visible in the table, this three weeks were used and were definitely necessary. 

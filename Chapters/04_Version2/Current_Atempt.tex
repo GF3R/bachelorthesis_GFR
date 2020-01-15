@@ -3,17 +3,17 @@
 \renewcommand{\thesection}{\arabic{section}}
 \setcounter{section}{0}
 
-After my first attempts and some discussion with my supervisor I realised that the system needs to be distributed. This means that the sensors send their data wirelessly. This enables me to add additional sensors without having issues with the Wire library or physical wires. However this increases the cost and complexity of each sensor slightly, since each sensor needs some sort of "brain", which handles the connection and communication. Which means each sensor needs to be equipped with a microcontroller, for example an ESP32. These are needed to establish and manage the wireless connection.
-However it reduces the complexity of the construction and the entire solution drastically. The logic will be distributed to many smaller services rather than an entire blob of logic. 
+After my first attempts and some discussion with my supervisor I realised that the system needs to be distributed. This means that the sensors send their data wirelessly. This enables me to add additional sensors without having issues with the Wire library or physical wires. However, this increases the cost and complexity of each sensor slightly, since each sensor needs some sort of "brain", which handles the connection and communication. Which means each sensor needs to be equipped with a microcontroller, for example an ESP32. These are needed to establish and manage the wireless connection.
+However, it reduces the complexity of the construction and the entire solution drastically. The logic will be distributed to many smaller services rather than an entire monolith of logic. 
 
 \section{Attempt A - Local Client Server Network}
 
-The communication was achieved via WIFI since I know the protocol and can get it running swiftly. Also the esp32 I have been using has WIFI natively enabled. Connecting the devices using bluetooth or bluetooth low energy (BLE) might help reduce electricity consumption. This will need testing in the future and will not be further investigated in this thesis.
+The communication was achieved via WIFI since I know the protocol and can get it running swiftly. Also the ESP32 I have been using has WIFI natively enabled. Connecting the devices using bluetooth or bluetooth low energy (BLE) might help reduce electricity consumption. This will need testing in the future and will not be further investigated in this thesis.
 
-An issue with wireless communication is the synchronisation of the data flow. To simplify the process and due to lack of know how and time to achieve a correct synchronisation I will ignore it, while knowing the data might be time shifted. 
+An issue with wireless communication is the synchronisation of the data flow. To simplify the process and due to lack of know how and time to achieve a correct synchronisation I will currently not take it into account, while knowing the data might be time shifted. 
 This might be an issue when visualising and analysing the data, but will be tackled then.
 
-Furthermore for the communication via WIFI a simple "Client Server" protocol was used which has already been implement in ESP32 Micro-controllers. This protocol, as far as I understood, communicated on the transport layer using TCP.\cite{arduinoi4:online} \cite{ESP32Ser71:online}
+Furthermore, for the communication via WIFI a simple "Client Server" protocol was used which has already been implement in ESP32 Micro-controllers. This protocol, as far as I understood, communicated on the transport layer using Transmission Control Protocol (TCP). \cite{arduinoi4:online} \cite{ESP32Ser71:online}
 
 Server Client Request: 
 \begin{lstlisting}
@@ -28,7 +28,7 @@ String clientRequest(String input)
     if (client) {
       if (client.connected()) {
         client.println(input);
-        data = client.readStringUntil('\r');  // received the server's answer
+        data = client.readStringUntil('\r'); // received the server's answer
         Serial.println(data);
         if (data != "\0")
         {
@@ -94,14 +94,14 @@ void loop () {
 \end{lstlisting}
 \cite{ESP32Ser71:online}
 
-The Data is sent 10 times per second for evaluation purposes. 
+The data is sent 10 times per second for evaluation purposes. 
 However this will be reduced and aggregated. Since the position of the user is not as time sensitive, that a millisecond response time is necessary. This enables us to simplify the data transfer from the devices, which is a benefit only achievable by the current configuration of "Smart-sensors".
 
-The Data is then saved onto a SD Card. This enables me to analyse the Data after measuring it and is simple to implement. This Concept works, however, it has some major flaws. 
+The data is then saved onto a SD Card. This enables me to analyse the data after measuring it and is simple to implement. This concept works, however, it has some major flaws. 
 
 \section{Flaws of Attempt A}
 
-Since I wanted to build an all in one system, I tried to save all the data locally. This was e mental barrier, set by the first attempt, where everything had to be fit in a single belt. Where everything was collected and then sent from a single node to another device, with Bluetooth or a local WiFi hotspot. This "closed system" and single node idea hat to thrown out before achieving a real improvement.
+Since I wanted to build an all in one system, I tried to save all the data locally. This was e mental barrier, set by the first attempt. In which everything had to be fit into a single belt. Where everything was collected and then sent from a single node to another device, with Bluetooth or a local WiFi hotspot. This "closed system" and single node idea hat to thrown out before achieving a real improvement.
 
 Furthermore, during the development and testing of this concept further flaws arose. The client server network was, in its current implementation, not very stable. Additionally, the implementation required much more hardware than I would have liked. 
 The Server needed a few modules for it to work, as shown below:
@@ -115,7 +115,7 @@ The Server needed a few modules for it to work, as shown below:
   \label{fig:ClientServer}
 \end{figure}
 
-This does not look like much but both of these elements, the RTC and the SD Card reader, add an additional point of failure, are quite complex and need to be configured. Additionally many different kinds of RTC and SD Card reader exists which do not have the exact same communication protocol or library. Which is a big flaw, when trying to create something open-source and useful. Since it restricts users and would require multiple different implementations. All this felt like quite the hassle and I soon realised I need to find a new way to communicate.
+These elements, the RTC and the SD Card reader, may look simple. However, tehy add an additional point of failure, are still quite complex to work with and need to be configured additionally. Additionally, many different kinds of RTC and SD card reader exists which do not have the exact same communication protocol or library. Which is a big flaw, when trying to create something open-source and useful. Since it restricts users and would require multiple different implementations. All this felt like quite the hassle and I soon realised that the communication needed to be changed.
 
 Beside these technical issues the data transfer during the development phase, the transfer and visualisation of the data was quite awkward. The device needed to be stopped and the data needed to be transferred manually from the SD-Card. This made the analysis very hard and static.
 
@@ -127,27 +127,27 @@ Beside these technical issues the data transfer during the development phase, th
   \label{fig:CommunicationDiagrammLocal}
 \end{figure}
 
-After working with it for a while I tried to find a much simpler way. An implementation closer to the goal of an easy and affordable sensor module. To improve the client server implementation, I first thought of using a simple http request. Since The messages would have been sent on the Application layer and not the network layer (see Figure \ref{fig:Networkpacket}) the HTTP protocol would have had much more overhead. However, in theory, this also would mean simpler and more stable communication. This however did not feel right. Running a HTTP server on a microcontroller did not offer any apparent benefits over using a "real" server. Furthermore HTTP has way to much overhead for such a scenario. I realised that the solution, was something I already was quite familiar with. A simple MQTT Broker. 
+After working with it for a while I tried to find a much simpler way. An implementation closer to the goal of an easy and affordable sensor module. To improve the client server implementation, I first thought of using a simple http request. Since The messages would have been sent on the Application layer and not the network layer (see Figure \ref{fig:Networkpacket}) the HTTP protocol would have had much more overhead. However, in theory, this also would mean simpler and more stable communication. This however did not feel right. Running a HTTP server on a microcontroller did not offer any apparent benefits over using a "real" server. Furthermore, HTTP has way to much overhead for such a scenario. I realised that the solution, was something I already was quite familiar with. A simple MQTT broker. 
 
-\begin{figure}[ht]
+\begin{figure}[h]
   \begin{center}
-\includegraphics[width=0.7\textwidth]{images/Screenshot_5.png}
+\includegraphics[width=0.5\textwidth]{images/Screenshot_5.png}
   \end{center}
-  \caption{Network Packet}
+  \caption{Network Packet \cite{22Dissec90:online}}
   \label{fig:Networkpacket}
 \end{figure}
-\cite{22Dissec90:online}
+
 
 
 \section{Attempt B - Communication via MQTT}
 
 After this first attempt I understood the received data and how to handle the message from the sensors.
-The Communication in my new attempt was handled with a simple \acrshort{mqtt} Broker (\gls{MQTT}), which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completely free and easy to apply. This MQTT broker could also run locally. However, this approach was not further investigated or tested. A local setup would be simple and but would currently not offer any real benefit.
+The communication in my new attempt was handled with a \acrshort{mqtt} broker (\gls{MQTT}), which can be setup for free within seconds. For my endeavours I used cloudmqtt.com which is completely free and easy to apply cloud service.  The MQTT broker could also run locally. However, this approach was not further investigated or tested. A local setup would be simple and but would currently not offer any real benefit.
 
 
 \begin{figure}[ht]
   \begin{center}
-\includegraphics[width=0.8\textwidth]{images/CommunicationDiagrammMQTT.png}
+\includegraphics[width=0.7\textwidth]{images/CommunicationDiagrammMQTT.png}
   \end{center}
   \caption{Communication Diagramm MQTT}
   \label{fig:CommunicationDiagrammMQTT}
@@ -280,9 +280,9 @@ char* getMessage(){
   return messagebuffer;
 }
 \end{lstlisting}
-As you can see the creation of the message, was almost the most complex part of the implementation. This was due to the fact, that the "PubSubClient" Library \cite{knollear26:online}, used to communicate with the MQTT Broker, could not handle "arduino" strings. Therefore char pointers were needed, which are a quite complicated to work with. The high complexity also caused an error while concatenating the char pointers. The lines which are commented out, is where the error occurred. Data was transferred and the JSON message almost looked correct. However, since the variable "i" is incremented once more, when accessing the index of the array. The wrong address, avgAccelVal[3] instead of avgAccelVal[2] is accessed. Therefore, the last acceleremoter value, is actually the first gyroscope value. This occurred, since the two char arrays were allocated directly after each other. The last gyroscope value was pointed to a random address, therefore the value was random as well. 
+The creation of the JSON message, was a very complex part of the implementation. This was due to the fact, that the "PubSubClient" Library \cite{knollear26:online}, used to communicate with the MQTT broker, could not handle "arduino" strings. Therefore char pointers were needed, which are a quite complicated to work with. The high complexity also caused an error while concatenating the char pointers. The lines which are commented out, is where the error occurred. Data was transferred and the JSON message almost looked correct. However, since the variable "i" is incremented once more, when accessing the index of the array. The wrong address, avgAccelVal[3] instead of avgAccelVal[2] is accessed. Therefore, the last acceleremoter value, is actually the first gyroscope value. This occurred, since the two char arrays were allocated directly after each other. The last gyroscope value was pointed to a random address, therefore the value was random as well. 
 This mistake was unfortunately only discovered when visualising the data, since C++ does not throw any errors when accessing items out of the array, and simply returns the values in the addresses accessed.
-Nonetheless after some tinkering I finally managed to get a correct \acrshort{json} message (\gls{JSON}) over the MQTT Broker:
+Nonetheless after some tinkering I finally managed to get a correct \acrshort{json} message (\gls{JSON}) over the MQTT broker:
 
 \begin{lstlisting}
 { 
@@ -292,9 +292,9 @@ Nonetheless after some tinkering I finally managed to get a correct \acrshort{js
 }
 \end{lstlisting}
 
-\acrshort{protobuff} (\gls{Protobuf}) would be a great alternative, which I will try to implement in the future. Protobuf does take some time to set up but would simplify the data transfer greatly since bytes could be directly sent and would not need to be concatenated to a JSON. However this was not attempted in this thesis. 
+\gls{Protobuf} (\acrshort{protobuff}) would be a great alternative, which I will try to implement in the future. Protobuf does take some time to set up but would simplify the data transfer greatly since bytes could be directly sent and would not need to be concatenated to a JSON. However this was not attempted in this thesis. 
 
-Additionally I enabled all devices to be calibrated remotely. This since when I put these devices on I will need to calibrate them after they are set in position. This is quite a simple task with MQTT since the clients can simply subscribe to a topic, from which they get messages: 
+Additionally, I enabled all devices to be calibrated remotely. This since when I put these devices on I will need to calibrate them after they are set in position. This is quite a simple task with MQTT since the clients can simply subscribe to a topic, from which they get messages: 
 
 \begin{lstlisting}
 void callback(char* topic, byte* message, unsigned int length) {
@@ -319,13 +319,13 @@ This callback gets registered when connecting to the mqtt broker.
 
 \subsection{Benefits Version 2}
 
-The benefits of managing the messages via a MQTT Broker was, that I could get the messages and work with them from any device with an Internet connection. This means that any calculation heavy tasks can be done from a "real" computer which handles these much better. 
+The benefits of managing the messages via a MQTT broker was, that I could get the messages and work with them from any device with an Internet connection. This means that any calculation heavy tasks can be done from a "real" computer which handles these much better. 
 
 This also enabled me to visualise and analyse the data in real-time which made it much easier. 
 
-Furthermore it also achieves the goal of being cheap and affordable. Since we now only need MPU6050 and microntrollers to send the data and this can be setup much easier than with an ESP32 "server".
+Furthermore, it also achieves the goal of being cheap and affordable. Since we now only need MPU6050 and microntrollers to send the data and this can be setup much easier than with an ESP32 "server".
 
-This also means that there does not need to be any more logic on the devices itself since everything can be done from a Computer. The vibration device which is attached to a sensor pin, can also be activated via the MQTT Broker. 
+This also means that there does not need to be any more logic on the devices itself since everything can be done from a Computer. The vibration device which is attached to a sensor pin, can also be activated via the MQTT broker. 
 
 The Fact that these sensors now can simply send data without knowing where they are sending their data to opens quite a lot of doors. I will get further into that in the chapter "Prospects".
 
@@ -333,17 +333,18 @@ The Fact that these sensors now can simply send data without knowing where they 
 
 The Obvious backdraw is, that the sensors need to have a constant Internet connection. This is obviously not great, especially when we try to develop something for an every usage since we are somewhat bound to a single place. 
 
-Furthermore if used as a product, these sensors would need to be registered first before usage, this does increase complexity for a first usage however simplifies setup greatly.
+Furthermore, if used as a product, these sensors would need to be registered first before usage, this does increase complexity for a first usage however simplifies setup greatly.
 
 
 \input{Chapters/04_Version2/identifying_posture.tex}
 
 \input{Chapters/04_Version2/Webapp.tex}
 
+\newpage
 
 \section{Hardware}
 
-The Implementation with MQTT not only simplifies the communication but also reduces the hardware complexity greatly. The only parts needed are an MPU6050 a vibration unit and some sort the micro-controller. Since MPU and vibration unit are suitable with almost any micro-controller there are almost no restrictions left. Additionally even the accelerometer and gyroscope hardware could be changed. The only restriction to analyse the data, is that the data is sent in the same JSON format. 
+The Implementation with MQTT not only simplifies the communication but also reduces the hardware complexity greatly. The only parts needed are an MPU6050 a vibration unit and some sort the micro-controller. Since MPU and vibration unit are suitable with almost any micro-controller there are almost no restrictions left. Additionally, even the accelerometer and gyroscope hardware could be changed. The only restriction to analyse the data, is that the data is sent in the same JSON format. 
 
 The parts were not all soldered together. The first implementation with the belt, tought me, that soldering things together is not optimal for prototyping. So I decided to create modules which can be attached to each other using cables. (Figure \ref{fig:SensorsViaCable}) This meant the different parts can be reconfigured multiple times.
 
@@ -356,7 +357,9 @@ The parts were not all soldered together. The first implementation with the belt
   \label{fig:SensorsViaCable}
 \end{figure}
 
-Currently the hardware all together costs, even when bought in Switzerland and as a single unit, about 20 CHF. When bought from china, still as single units, the price can be reduced to about 12 CHF. I would estimate that the price could be lowered further, when buying in bulk, to about 5 CHF.
+Currently, the hardware all together costs, even when bought in Switzerland and as a single unit, about 20 CHF. When bought from china, still as single units, the price can be reduced to about 12 CHF. I would estimate that the price could be lowered further, when buying in bulk, to about 5 CHF.
+
+Optimally a single circuit board would be created where all the necessary processors are combined. According to an electrical engineers I have asked, designing such a board would not take much time. Such boards could then be ordered and would probably reduce the cost. Such a board would also reduce the complexity of the build drastically. These could bought in bulk and would probably reduce the cost even further. Since the needed sensors and configuration only became clearer during this thesis. Therefore, no such circuit board was designed or ordered yet.
 
 
 \input{Chapters/04_Version2/techincal_difficulties.tex}
